@@ -11,27 +11,27 @@ func Test_stack_Push(t *testing.T) {
 	}
 	tests := []struct {
 		name string
-		s    *stack
+		s    *Stack
 		args args
-		want *stack
+		want *Stack
 	}{
 		{
 			"to empty stack",
-			&stack{},
+			&Stack{},
 			args{[]byte{0x0}},
-			&stack{[]byte{0x0}},
+			&Stack{[]byte{0x0}},
 		},
 		{
 			"add as last element",
-			&stack{[]byte{0x0}},
+			&Stack{[]byte{0x0}},
 			args{[]byte{0x1}},
-			&stack{[]byte{0x0}, []byte{0x1}},
+			&Stack{[]byte{0x0}, []byte{0x1}},
 		},
 		{
 			"nil is ignored",
-			&stack{},
+			&Stack{},
 			args{nil},
-			&stack{},
+			&Stack{},
 		},
 	}
 	for _, tt := range tests {
@@ -48,11 +48,11 @@ func Test_stack_Push(t *testing.T) {
 func Test_stack_Pop(t *testing.T) {
 	tests := []struct {
 		name string
-		s    *stack
+		s    *Stack
 		want []byte
 	}{
-		{"from empty stack", &stack{}, nil},
-		{"returns last element", &stack{[]byte{0x0}, []byte{0x1}}, []byte{0x1}},
+		{"from empty stack", &Stack{}, nil},
+		{"returns last element", &Stack{[]byte{0x0}, []byte{0x1}}, []byte{0x1}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

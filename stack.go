@@ -2,13 +2,13 @@
 // This allows for the programmatic validation of transactions.
 package script
 
-// A stack is a FIFO data structure which orders data.
-type stack [][]byte
+// A Stack is a FIFO data structure which orders data.
+type Stack [][]byte
 
 // Push appends a given value to the top of the stack.
 //
 // The nil value is ignored.
-func (s *stack) Push(v []byte) {
+func (s *Stack) Push(v []byte) {
 	if v == nil {
 		return
 	}
@@ -19,7 +19,7 @@ func (s *stack) Push(v []byte) {
 // Pop yields the top of the stack.
 //
 // If the stack is empty nil is returned.
-func (s *stack) Pop() []byte {
+func (s *Stack) Pop() []byte {
 	if len(*s) == 0 {
 		return nil
 	}
