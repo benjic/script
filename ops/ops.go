@@ -31,7 +31,7 @@ func init() {
 }
 
 // An Op is a single instruction to be executed.
-type Op func(Context)
+type Op func(Context) error
 
 // Context allows an operation to manipulate the execution context.
 type Context interface {

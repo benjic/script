@@ -27,29 +27,36 @@ const (
 )
 
 func createOpPushNBytes(n uint8) Op {
-	return func(c Context) {
+	return func(c Context) error {
 		bs := make([]byte, n)
-		c.Read(bs)
-		// TODO: Handle failure
+		_, err := c.Read(bs)
+		if err != nil {
+			return err
+		}
 
 		c.Push(bs)
+		return nil
 	}
 }
 
 func createOpPushN(n uint8) Op {
-	return func(c Context) {
+	return func(c Context) error {
 		c.Push([]byte{0x00, 0x00, 0x00, n})
+		return nil
 	}
 }
 
-func opFalse(c Context) {
+func opFalse(c Context) error {
 	c.Push([]byte{0x00, 0x00, 0x0, 0x00})
+	return nil
 }
 
-func op1Negate(c Context) {
+func op1Negate(c Context) error {
 	c.Push([]byte{0x40, 0x00, 0x00, 0x01})
+	return nil
 }
 
-func opTrue(c Context) {
+func opTrue(c Context) error {
 	c.Push([]byte{0x00, 0x00, 0x00, 0x01})
+	return nil
 }

@@ -32,7 +32,10 @@ func Evaluate(input io.Reader) error {
 				return fmt.Errorf("unknown op for code %d", opCode)
 			}
 
-			op(context)
+			err := op(context)
+			if err != nil {
+				return fmt.Errorf("op (%d) failed: %s", opCode, err)
+			}
 
 		case io.EOF:
 			if bytes.Equal(context.stack.Pop(), []byte{0x00, 0x00, 0x00, 0x00}) {
