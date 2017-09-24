@@ -3,7 +3,7 @@ package ops
 import "bytes"
 
 const (
-	OP_EQUAL = 0x87
+	OP_EQUAL uint8 = 0x87
 )
 
 func opEqual(c Context) {

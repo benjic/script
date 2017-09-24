@@ -1,6 +1,7 @@
 package script
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 
@@ -25,7 +26,6 @@ func Evaluate(input io.Reader) error {
 		_, err := input.Read(op)
 		switch err {
 		case nil:
-			// TODO: Evaluate operation
 			opCode := uint8(op[0])
 			op, ok := ops.OpRegistry[opCode]
 			if !ok {
@@ -35,7 +35,9 @@ func Evaluate(input io.Reader) error {
 			op(context)
 
 		case io.EOF:
-			// TODO: Evaluate success after reading program input
+			if bytes.Equal(context.stack.Pop(), []byte{0x00, 0x00, 0x00, 0x00}) {
+				return fmt.Errorf("top value of stack is false")
+			}
 			return nil
 		default:
 			return err

@@ -18,9 +18,26 @@ func TestEvaluate(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			"test",
-			args{bytes.NewReader([]byte{ops.OP_1NEGATE, ops.OP_1NEGATE, ops.OP_EQUAL})},
+			"top stack value is true",
+			args{bytes.NewReader([]byte{
+				ops.OP_TRUE,
+			})},
 			false,
+		},
+		{
+			"top value is false",
+			args{bytes.NewReader([]byte{
+				ops.OP_FALSE,
+			})},
+			true,
+		},
+
+		{
+			"unknown op code",
+			args{bytes.NewReader([]byte{
+				0xFF,
+			})},
+			true,
 		},
 	}
 	for _, tt := range tests {
