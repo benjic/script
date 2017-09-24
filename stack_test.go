@@ -27,6 +27,12 @@ func Test_stack_Push(t *testing.T) {
 			args{[]byte{0x1}},
 			&stack{[]byte{0x0}, []byte{0x1}},
 		},
+		{
+			"nil is ignored",
+			&stack{},
+			args{nil},
+			&stack{},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
