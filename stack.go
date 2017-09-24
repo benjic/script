@@ -3,12 +3,12 @@
 package script
 
 // A Stack is a FIFO data structure which orders data.
-type Stack [][]byte
+type stack [][]byte
 
 // Push appends a given value to the top of the stack.
 //
 // The nil value is ignored.
-func (s *Stack) Push(v []byte) {
+func (s *stack) Push(v []byte) {
 	if v == nil {
 		return
 	}
@@ -19,7 +19,7 @@ func (s *Stack) Push(v []byte) {
 // Pop yields the top of the stack.
 //
 // If the stack is empty nil is returned.
-func (s *Stack) Pop() []byte {
+func (s *stack) Pop() []byte {
 	if len(*s) == 0 {
 		return nil
 	}

@@ -3,41 +3,39 @@ package ops
 import (
 	"reflect"
 	"testing"
-
-	"github.com/benjic/script"
 )
 
 func Test_equal(t *testing.T) {
 	type args struct {
-		c *script.Stack
+		c *context
 	}
 	tests := []struct {
 		name string
 		args args
-		want *script.Stack
+		want *stack
 	}{
 		{
 			"equal",
-			args{&script.Stack{[]byte{0x00}, []byte{0x00}}},
-			&script.Stack{[]byte{0x00, 0x00, 0x00, 0x01}},
+			args{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
+			&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
 		},
 		{
 			"not equal",
-			args{&script.Stack{[]byte{0x00}, []byte{0x01}}},
-			&script.Stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+			args{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
+			&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 		},
 		{
 			"not enough arguments",
-			args{&script.Stack{[]byte{0x01}}},
-			&script.Stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+			args{contextWithStack(&stack{[]byte{0x01}})},
+			&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			equal(tt.args.c)
+			opEqual(tt.args.c)
 
-			if !reflect.DeepEqual(tt.args.c, tt.want) {
+			if !reflect.DeepEqual(tt.args.c.stack, tt.want) {
 				t.Errorf("Want: %+v; Got: %+v", tt.want, tt.args.c)
 			}
 		})

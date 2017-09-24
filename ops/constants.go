@@ -6,14 +6,14 @@ const (
 	OP_TRUE    = 0x51
 )
 
-func opFalse(c context) {
+func opFalse(c Context) {
 	c.Push([]byte{0x00, 0x00, 0x0, 0x00})
 }
 
-func op1Negate(c context) {
+func op1Negate(c Context) {
 	c.Push([]byte{0x40, 0x00, 0x00, 0x01})
 }
 
-func opTrue(c context) {
+func opTrue(c Context) {
 	c.Push([]byte{0x00, 0x00, 0x00, 0x01})
 }
