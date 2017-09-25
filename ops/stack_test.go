@@ -88,3 +88,41 @@ func Test_opFromAltStack(t *testing.T) {
 		})
 	}
 }
+
+func Test_opIfDup(t *testing.T) {
+	type args struct {
+		c *context
+	}
+	type want struct {
+		err   bool
+		stack *stack
+	}
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			"non zero top stack",
+			args{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x01}})},
+			want{false, &stack{[]byte{0x00, 0x00, 0x00, 0x01}, []byte{0x00, 0x00, 0x00, 0x01}}},
+		},
+		{
+			"zero top stack",
+			args{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x00}})},
+			want{false, &stack{[]byte{0x00, 0x00, 0x00, 0x00}}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := opIfDup(tt.args.c)
+			if (err != nil) != tt.want.err {
+				t.Errorf("opFromAltStack() error = %v, want err %v", err, tt.want.err)
+			}
+
+			if !reflect.DeepEqual(tt.want.stack, tt.args.c.stack) {
+				t.Errorf("want %v; got %v", tt.want.stack, tt.args.c.stack)
+			}
+		})
+	}
+}

@@ -17,6 +17,11 @@ var (
 
 		// Logic
 		OP_EQUAL: opEqual,
+
+		// Stack
+		OP_TOALTSTACK:   opToAltStack,
+		OP_FROMALTSTACK: opFromAltStack,
+		OP_IFDUP:        opIfDup,
 	}
 )
 
