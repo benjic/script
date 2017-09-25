@@ -22,6 +22,7 @@ var (
 		OP_TOALTSTACK:   opToAltStack,
 		OP_FROMALTSTACK: opFromAltStack,
 		OP_IFDUP:        opIfDup,
+		OP_DEPTH:        opDepth,
 	}
 )
 
