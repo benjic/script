@@ -28,6 +28,14 @@ const (
 
 func createOpPushNBytes(n uint8) Op {
 	return func(c Context) error {
+		if n == 0 {
+			// TODO(benjic): Verify this is the correct behavior
+			return nil
+		}
+
+		// TODO(benjic): This will succeed if the read hits the EOF within this
+		// call. We should fail if given a push of n bytes but <n bytes are
+		// available.
 		bs := make([]byte, n)
 		_, err := c.Read(bs)
 		if err != nil {
@@ -35,6 +43,7 @@ func createOpPushNBytes(n uint8) Op {
 		}
 
 		c.Push(bs)
+
 		return nil
 	}
 }

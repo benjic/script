@@ -100,3 +100,91 @@ func Test_opTrue(t *testing.T) {
 		})
 	}
 }
+
+func Test_createOpPushNBytes(t *testing.T) {
+	type args struct {
+		context *context
+		n       uint8
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *stack
+		wantErr bool
+	}{
+		{
+			"zero",
+			args{contextWithData([]byte{0x00}), 0},
+			&stack{},
+			false,
+		},
+		{
+			"correct number of bytes available",
+			args{contextWithData([]byte{0x00}), 1},
+			&stack{[]byte{0x00}},
+			false,
+		},
+		// TODO(benjic): The io.Read call will not EOF if the end of the buffer
+		// is encountered *during* the read.
+		//
+		// https://github.com/golang/go/issues/21852
+		//
+		// {
+		// 	"incorrect number of bytes available",
+		// 	args{contextWithData([]byte{0x01}), 2},
+		// 	&stack{},
+		// 	true,
+		// },
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := createOpPushNBytes(tt.args.n)
+
+			err := op(tt.args.context)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("op() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if !reflect.DeepEqual(tt.args.context.stack, tt.want) {
+				t.Errorf("Want %+v; Got %+v", tt.want, tt.args.context.stack)
+			}
+		})
+	}
+}
+
+func Test_createOpPushN(t *testing.T) {
+	type args struct {
+		n uint8
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *stack
+		wantErr bool
+	}{
+		{
+			"simple",
+			args{0xff},
+			&stack{[]byte{0x00, 0x00, 0x00, 0xff}},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			op := createOpPushN(tt.args.n)
+			context := emptyContext()
+
+			err := op(context)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("op() error = %v, wantErr %v", err, tt.wantErr)
+			}
+
+			if !reflect.DeepEqual(context.stack, tt.want) {
+				t.Errorf("Want %+v; Got %+v", tt.want, context.stack)
+			}
+		})
+	}
+}

@@ -1,19 +1,21 @@
 package ops
 
-import "io"
-import "bytes"
+import (
+	"bytes"
+	"io"
+)
 
 // A Stack is a FIFO data structure which orders data.
 type stack [][]byte
 
 type context struct {
-	stack  *stack
-	reader io.Reader
+	*stack
+	io.Reader
 }
 
 func (c *context) Push(val []byte)             { c.stack.Push(val) }
 func (c *context) Pop() []byte                 { return c.stack.Pop() }
-func (c *context) Read(bs []byte) (int, error) { return c.reader.Read(bs) }
+func (c *context) Read(bs []byte) (int, error) { return c.Reader.Read(bs) }
 
 func emptyContext() *context {
 	return &context{&stack{}, new(bytes.Buffer)}
@@ -21,6 +23,13 @@ func emptyContext() *context {
 
 func contextWithStack(s *stack) *context {
 	return &context{s, new(bytes.Buffer)}
+}
+
+func contextWithData(buf []byte) *context {
+	return &context{
+		&stack{},
+		bytes.NewBuffer(buf),
+	}
 }
 
 // Push appends a given value to the top of the stack.
