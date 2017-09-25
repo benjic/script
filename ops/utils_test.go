@@ -10,23 +10,31 @@ type stack [][]byte
 
 type context struct {
 	*stack
+	alt *stack
 	io.Reader
 }
 
-func (c *context) Push(val []byte)             { c.stack.Push(val) }
 func (c *context) Pop() []byte                 { return c.stack.Pop() }
+func (c *context) PopAlt() []byte              { return c.alt.Pop() }
+func (c *context) Push(val []byte)             { c.stack.Push(val) }
+func (c *context) PushAlt(val []byte)          { c.alt.Push(val) }
 func (c *context) Read(bs []byte) (int, error) { return c.Reader.Read(bs) }
 
 func emptyContext() *context {
-	return &context{&stack{}, new(bytes.Buffer)}
+	return &context{&stack{}, &stack{}, new(bytes.Buffer)}
 }
 
 func contextWithStack(s *stack) *context {
-	return &context{s, new(bytes.Buffer)}
+	return &context{s, &stack{}, new(bytes.Buffer)}
+}
+
+func contextWithStackAndAlt(s *stack, alt *stack) *context {
+	return &context{s, alt, new(bytes.Buffer)}
 }
 
 func contextWithData(buf []byte) *context {
 	return &context{
+		&stack{},
 		&stack{},
 		bytes.NewBuffer(buf),
 	}

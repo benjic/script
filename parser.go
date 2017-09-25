@@ -10,17 +10,20 @@ import (
 
 type evaluationContext struct {
 	*stack
+	alt    *stack
 	reader io.Reader
 }
 
-func (c *evaluationContext) Push(value []byte)           { c.stack.Push(value) }
 func (c *evaluationContext) Pop() []byte                 { return c.stack.Pop() }
+func (c *evaluationContext) PopAlt() []byte              { return c.alt.Pop() }
+func (c *evaluationContext) Push(value []byte)           { c.stack.Push(value) }
+func (c *evaluationContext) PushAlt(value []byte)        { c.alt.Push(value) }
 func (c *evaluationContext) Read(bs []byte) (int, error) { return c.reader.Read(bs) }
 
 // Evaluate executes the binary representation of a script.
 func Evaluate(input io.Reader) error {
 	op := make([]byte, 1)
-	context := &evaluationContext{&stack{}, input}
+	context := &evaluationContext{&stack{}, &stack{}, input}
 
 	for {
 		_, err := input.Read(op)

@@ -36,6 +36,10 @@ type Op func(Context) error
 // Context allows an operation to manipulate the execution context.
 type Context interface {
 	io.Reader
+
 	Pop() []byte
+	PopAlt() []byte
+
 	Push([]byte)
+	PushAlt([]byte)
 }
