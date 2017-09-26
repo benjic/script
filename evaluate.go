@@ -18,7 +18,7 @@ func Evaluate(input io.Reader) error {
 		switch err {
 		case nil:
 			opCode := uint8(op[0])
-			op, ok := ops.OpRegistry[opCode]
+			op, ok := ops.Default.GetOp(opCode)
 			if !ok {
 				return fmt.Errorf("unknown op for code %d", opCode)
 			}

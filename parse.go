@@ -13,7 +13,7 @@ import (
 func Parse(in string) (*bytes.Buffer, error) {
 	buf := []byte{}
 	for _, token := range strings.Fields(in) {
-		op, ok := ops.OpCodeLookup[token]
+		op, ok := ops.Default.GetCode(token)
 		if ok {
 			buf = append(buf, byte(op))
 		} else {
