@@ -1,5 +1,9 @@
 package ops
 
+import (
+	"fmt"
+)
+
 const (
 	OP_0         uint8 = 0x00
 	OP_FALSE     uint8 = 0x00
@@ -33,13 +37,14 @@ func createOpPushNBytes(n uint8) Op {
 			return nil
 		}
 
-		// TODO(benjic): This will succeed if the read hits the EOF within this
-		// call. We should fail if given a push of n bytes but <n bytes are
-		// available.
 		bs := make([]byte, n)
-		_, err := c.Read(bs)
+		cnt, err := c.Read(bs)
 		if err != nil {
 			return err
+		}
+
+		if cnt != int(n) {
+			return fmt.Errorf("Insufficient number of bytes available")
 		}
 
 		c.Push(bs)

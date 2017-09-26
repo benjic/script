@@ -124,17 +124,12 @@ func Test_createOpPushNBytes(t *testing.T) {
 			&stack{[]byte{0x00}},
 			false,
 		},
-		// TODO(benjic): The io.Read call will not EOF if the end of the buffer
-		// is encountered *during* the read.
-		//
-		// https://github.com/golang/go/issues/21852
-		//
-		// {
-		// 	"incorrect number of bytes available",
-		// 	args{contextWithData([]byte{0x01}), 2},
-		// 	&stack{},
-		// 	true,
-		// },
+		{
+			"incorrect number of bytes available",
+			args{contextWithData([]byte{0x01}), 2},
+			&stack{},
+			true,
+		},
 	}
 
 	for _, tt := range tests {
