@@ -10,6 +10,7 @@ const (
 	OP_FROMALTSTACK uint8 = 0x6c
 	OP_IFDUP        uint8 = 0x73
 	OP_DEPTH        uint8 = 0x74
+	OP_DROP         uint8 = 0x75
 )
 
 func opToAltStack(c Context) error {
@@ -54,5 +55,10 @@ func opDepth(c Context) error {
 
 	binary.BigEndian.PutUint32(buf, d)
 	c.Push(buf)
+	return nil
+}
+
+func opDrop(c Context) error {
+	c.Pop()
 	return nil
 }

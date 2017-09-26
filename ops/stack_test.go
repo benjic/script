@@ -173,3 +173,41 @@ func Test_opDepth(t *testing.T) {
 		})
 	}
 }
+
+func Test_opDrop(t *testing.T) {
+	type args struct {
+		c *context
+	}
+	type want struct {
+		err   bool
+		stack *stack
+	}
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			"empty stack",
+			args{contextWithStack(&stack{})},
+			want{false, &stack{}},
+		},
+		{
+			"single value",
+			args{contextWithStack(&stack{[]byte{0x00}})},
+			want{false, &stack{}},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := opDrop(tt.args.c)
+			if (err != nil) != tt.want.err {
+				t.Errorf("opFromAltStack() error = %v, want err %v", err, tt.want.err)
+			}
+
+			if !reflect.DeepEqual(tt.want.stack, tt.args.c.stack) {
+				t.Errorf("want %v; got %v", tt.want.stack, tt.args.c.stack)
+			}
+		})
+	}
+}
