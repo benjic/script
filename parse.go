@@ -3,6 +3,7 @@ package script
 import (
 	"bytes"
 	"encoding/hex"
+	"fmt"
 	"strings"
 
 	"github.com/benjic/script/ops"
@@ -20,6 +21,10 @@ func Parse(in string) (*bytes.Buffer, error) {
 			if err != nil {
 				return new(bytes.Buffer), err
 			}
+			if len(str) > 75 {
+				return new(bytes.Buffer), fmt.Errorf("data token too large")
+			}
+			buf = append(buf, byte(uint(len(str))))
 			buf = append(buf, str...)
 		}
 	}

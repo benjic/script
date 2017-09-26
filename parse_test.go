@@ -2,6 +2,7 @@ package script
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/benjic/script/ops"
@@ -18,9 +19,9 @@ func TestParse(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			"simple",
-			args{"FF OP_FALSE"},
-			[]byte{0xFF, ops.OP_FALSE},
+			"good data",
+			args{"FF "},
+			[]byte{0x01, 0xFF},
 			false,
 		},
 		{
@@ -28,6 +29,18 @@ func TestParse(t *testing.T) {
 			args{"nothex"},
 			nil,
 			true,
+		},
+		{
+			"too large data",
+			args{strings.Repeat("A", 1000)},
+			nil,
+			true,
+		},
+		{
+			"op",
+			args{"OP_FALSE"},
+			[]byte{ops.OP_FALSE},
+			false,
 		},
 	}
 	for _, tt := range tests {
