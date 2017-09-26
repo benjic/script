@@ -24,6 +24,16 @@ var (
 		OP_IFDUP:        opIfDup,
 		OP_DEPTH:        opDepth,
 	}
+
+	OpCodeLookup = map[string]uint8{
+		// Constants
+		"OP_FALSE":     OP_FALSE,
+		"OP_PUSHDATA1": OP_PUSHDATA1,
+		"OP_PUSHDATA2": OP_PUSHDATA2,
+		"OP_PUSHDATA4": OP_PUSHDATA4,
+		"OP_1NEGATE":   OP_1NEGATE,
+		"OP_TRUE":      OP_TRUE,
+	}
 )
 
 func init() {
