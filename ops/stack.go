@@ -12,6 +12,7 @@ const (
 	OP_DEPTH        uint8 = 0x74
 	OP_DROP         uint8 = 0x75
 	OP_DUP          uint8 = 0x76
+	OP_NIP          uint8 = 0x77
 )
 
 func opToAltStack(c Context) error {
@@ -72,6 +73,13 @@ func opDup(c Context) error {
 		c.Push(v2)
 	}
 
+	c.Push(v)
+	return nil
+}
+
+func opNip(c Context) error {
+	v := c.Pop()
+	c.Pop()
 	c.Push(v)
 	return nil
 }
