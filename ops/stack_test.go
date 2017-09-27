@@ -211,3 +211,41 @@ func Test_opDrop(t *testing.T) {
 		})
 	}
 }
+
+func Test_opDup(t *testing.T) {
+	type args struct {
+		c *context
+	}
+	type want struct {
+		err   bool
+		stack *stack
+	}
+	tests := []struct {
+		name string
+		args args
+		want want
+	}{
+		{
+			"simple",
+			args{contextWithStack(&stack{{0x1}})},
+			want{false, &stack{{0x1}, {0x1}}},
+		},
+		{
+			"empty stack",
+			args{contextWithStack(&stack{})},
+			want{false, &stack{}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := opDup(tt.args.c); (err != nil) != tt.want.err {
+				t.Errorf("opDup() error = %v, wantErr %v", err, tt.want.err)
+			}
+
+			if !reflect.DeepEqual(tt.want.stack, tt.args.c.stack) {
+				t.Errorf("want %v; got %v", tt.want.stack, tt.args.c.stack)
+			}
+		})
+	}
+}

@@ -11,6 +11,7 @@ const (
 	OP_IFDUP        uint8 = 0x73
 	OP_DEPTH        uint8 = 0x74
 	OP_DROP         uint8 = 0x75
+	OP_DUP          uint8 = 0x76
 )
 
 func opToAltStack(c Context) error {
@@ -60,5 +61,17 @@ func opDepth(c Context) error {
 
 func opDrop(c Context) error {
 	c.Pop()
+	return nil
+}
+
+func opDup(c Context) error {
+	v := c.Pop()
+	if v != nil {
+		v2 := make([]byte, len(v))
+		copy(v2, v)
+		c.Push(v2)
+	}
+
+	c.Push(v)
 	return nil
 }

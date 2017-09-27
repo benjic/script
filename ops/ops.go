@@ -23,6 +23,7 @@ var (
 			OP_FROMALTSTACK: opFromAltStack,
 			OP_IFDUP:        opIfDup,
 			OP_DEPTH:        opDepth,
+			OP_DUP:          opDup,
 		},
 		map[string]uint8{
 			// Constants
@@ -41,6 +42,7 @@ var (
 			"OP_FROMALTSTACK": OP_FROMALTSTACK,
 			"OP_IFDUP":        OP_IFDUP,
 			"OP_DEPTH":        OP_DEPTH,
+			"OP_DUP":          OP_DUP,
 		},
 	}
 
