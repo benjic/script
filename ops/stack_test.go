@@ -61,6 +61,15 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"non zero top stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"non zero top stack",
 					opArgs{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x01}})},
 					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x01}, []byte{0x00, 0x00, 0x00, 0x01}},
@@ -172,6 +181,30 @@ func TestStackOps(t *testing.T) {
 						&stack{{0x1}},
 						&stack{},
 						ErrInvalidStackOperation,
+					},
+				},
+			},
+		},
+		{
+			"opNip",
+			opNip,
+			[]opTest{
+				{
+					"invalid size",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					opWant{
+						&stack{{0x2}},
+						&stack{},
+						nil,
 					},
 				},
 			},
