@@ -8,43 +8,43 @@ var (
 	defaultProvider = &provider{
 		map[uint8]Op{
 			// Constants
-			OP_FALSE:     opFalse,
-			OP_PUSHDATA1: createOpPushNBytes(1),
-			OP_PUSHDATA2: createOpPushNBytes(2),
-			OP_PUSHDATA4: createOpPushNBytes(4),
-			OP_1NEGATE:   op1Negate,
-			OP_TRUE:      opTrue,
+			OpFalse:     opFalse,
+			OpPushData1: createOpPushNBytes(1),
+			OpPushData2: createOpPushNBytes(2),
+			OpPushData4: createOpPushNBytes(4),
+			Op1Negate:   op1Negate,
+			OpTrue:      opTrue,
 
 			// Logic
-			OP_EQUAL: opEqual,
+			OpEqual: opEqual,
 
 			// Stack
-			OP_TOALTSTACK:   opToAltStack,
-			OP_FROMALTSTACK: opFromAltStack,
-			OP_IFDUP:        opIfDup,
-			OP_DEPTH:        opDepth,
-			OP_DUP:          opDup,
-			OP_NIP:          opNip,
+			OpToAltStack:   opToAltStack,
+			OpFromAltStack: opFromAltStack,
+			OpIfDup:        opIfDup,
+			OpDepth:        opDepth,
+			OpDup:          opDup,
+			OpNip:          opNip,
 		},
 		map[string]uint8{
 			// Constants
-			"OP_FALSE":     OP_FALSE,
-			"OP_PUSHDATA1": OP_PUSHDATA1,
-			"OP_PUSHDATA2": OP_PUSHDATA2,
-			"OP_PUSHDATA4": OP_PUSHDATA4,
-			"OP_1NEGATE":   OP_1NEGATE,
-			"OP_TRUE":      OP_TRUE,
+			"OP_FALSE":     OpFalse,
+			"OP_PUSHDATA1": OpPushData1,
+			"OP_PUSHDATA2": OpPushData2,
+			"OP_PUSHDATA4": OpPushData4,
+			"OP_1NEGATE":   Op1Negate,
+			"OP_TRUE":      OpTrue,
 
 			// Logic
-			"OP_EQUAL": OP_EQUAL,
+			"OP_EQUAL": OpEqual,
 
 			// Stack
-			"OP_TOALTSTACK":   OP_TOALTSTACK,
-			"OP_FROMALTSTACK": OP_FROMALTSTACK,
-			"OP_IFDUP":        OP_IFDUP,
-			"OP_DEPTH":        OP_DEPTH,
-			"OP_DUP":          OP_DUP,
-			"OP_NIP":          OP_NIP,
+			"OP_TOALTSTACK":   OpToAltStack,
+			"OP_FROMALTSTACK": OpFromAltStack,
+			"OP_IFDUP":        OpIfDup,
+			"OP_DEPTH":        OpDepth,
+			"OP_DUP":          OpDup,
+			"OP_NIP":          OpNip,
 		},
 	}
 
@@ -57,7 +57,7 @@ func init() {
 		defaultProvider.ops[i] = createOpPushNBytes(i)
 	}
 
-	for i := OP_2; i <= OP_16; i++ {
+	for i := Op2; i <= Op16; i++ {
 		defaultProvider.ops[i] = createOpPushN(i)
 	}
 }

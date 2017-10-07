@@ -2,8 +2,9 @@ package ops
 
 import "bytes"
 
+// TODO(benjic): Document the operation symbols
 const (
-	OP_EQUAL uint8 = 0x87
+	OpEqual uint8 = 0x87
 )
 
 func opEqual(c Context) error {
