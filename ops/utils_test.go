@@ -19,6 +19,8 @@ func (c *context) PopAlt() []byte              { return c.alt.Pop() }
 func (c *context) Push(val []byte)             { c.stack.Push(val) }
 func (c *context) PushAlt(val []byte)          { c.alt.Push(val) }
 func (c *context) Read(bs []byte) (int, error) { return c.Reader.Read(bs) }
+func (c *context) Size() int                   { return c.stack.Size() }
+func (c *context) SizeAlt() int                { return c.alt.Size() }
 
 func emptyContext() *context {
 	return &context{&stack{}, &stack{}, new(bytes.Buffer)}
@@ -63,4 +65,8 @@ func (s *stack) Pop() []byte {
 	*s = (*s)[:len(*s)-1]
 
 	return v
+}
+
+func (s *stack) Size() int {
+	return len(*s)
 }

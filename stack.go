@@ -29,3 +29,8 @@ func (s *stack) Pop() []byte {
 
 	return v
 }
+
+// Size returns the number of items on the stack.
+func (s *stack) Size() int {
+	return len(*s)
+}

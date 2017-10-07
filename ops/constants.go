@@ -1,6 +1,7 @@
 package ops
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -28,6 +29,12 @@ const (
 	OP_14        uint8 = 0x5e
 	OP_15        uint8 = 0x5f
 	OP_16        uint8 = 0x60
+)
+
+var (
+	// ErrInvalidStackOperation indicates an operation was attempted against a
+	// stack with an invalid size.
+	ErrInvalidStackOperation = errors.New("operation not valid with the current stack size")
 )
 
 func createOpPushNBytes(n uint8) Op {

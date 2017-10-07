@@ -74,4 +74,7 @@ type Context interface {
 
 	Push([]byte)
 	PushAlt([]byte)
+
+	Size() int
+	SizeAlt() int
 }

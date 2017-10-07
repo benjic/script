@@ -17,16 +17,29 @@ const (
 )
 
 func opToAltStack(c Context) error {
+	if c.Size() < 1 {
+		return ErrInvalidStackOperation
+	}
+
 	c.PushAlt(c.Pop())
+
 	return nil
 }
 
 func opFromAltStack(c Context) error {
+	if c.SizeAlt() < 1 {
+		return ErrInvalidStackOperation
+	}
+
 	c.Push(c.PopAlt())
 	return nil
 }
 
 func opIfDup(c Context) error {
+	if c.Size() < 1 {
+		return ErrInvalidStackOperation
+	}
+
 	v := c.Pop()
 
 	if !bytes.Equal(v, []byte{0x00, 0x00, 0x00, 0x00}) {
@@ -41,32 +54,25 @@ func opIfDup(c Context) error {
 }
 
 func opDepth(c Context) error {
-	buf := []byte{0x00, 0x00, 0x00, 0x00}
-	var d uint32
-	for {
-		v := c.Pop()
-		if v == nil {
-			break
-		}
-		c.PushAlt(v)
-		d++
-	}
-
-	for i := uint32(0); i < d; i++ {
-		c.Push(c.PopAlt())
-	}
-
-	binary.BigEndian.PutUint32(buf, d)
-	c.Push(buf)
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, int32(c.Size()))
+	c.Push(buf.Bytes())
 	return nil
 }
 
 func opDrop(c Context) error {
+	if c.Size() < 1 {
+		return ErrInvalidStackOperation
+	}
 	c.Pop()
 	return nil
 }
 
 func opDup(c Context) error {
+	if c.Size() < 1 {
+		return ErrInvalidStackOperation
+	}
+
 	v := c.Pop()
 	if v != nil {
 		v2 := make([]byte, len(v))
@@ -79,6 +85,10 @@ func opDup(c Context) error {
 }
 
 func opNip(c Context) error {
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
 	v := c.Pop()
 	c.Pop()
 	c.Push(v)
@@ -86,6 +96,10 @@ func opNip(c Context) error {
 }
 
 func opOver(c Context) error {
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
 	v2 := c.Pop()
 	v1 := c.Pop()
 	c.Push(v1)
