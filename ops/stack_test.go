@@ -6,33 +6,15 @@ import (
 )
 
 func TestStackOps(t *testing.T) {
-	type args struct {
-		context *context
-	}
-	type want struct {
-		stack *stack
-		alt   *stack
-		err   error
-	}
-	type test struct {
-		name string
-		args args
-		want want
-	}
-
-	tests := []struct {
-		name  string
-		op    Op
-		tests []test
-	}{
+	tests := []opTests{
 		{
 			"opToAltStack",
 			opToAltStack,
-			[]test{
+			[]opTest{
 				{
 					"empty stack",
-					args{contextWithStackAndAlt(&stack{}, &stack{[]byte{0x00}})},
-					want{
+					opArgs{contextWithStackAndAlt(&stack{}, &stack{[]byte{0x00}})},
+					opWant{
 						&stack{},
 						&stack{[]byte{0x00}},
 						ErrInvalidStackOperation,
@@ -40,8 +22,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					args{contextWithStackAndAlt(&stack{[]byte{0x00}, []byte{0xff}}, &stack{[]byte{0x00}})},
-					want{
+					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}, []byte{0xff}}, &stack{[]byte{0x00}})},
+					opWant{
 						&stack{[]byte{0x00}},
 						&stack{[]byte{0x00}, []byte{0xff}},
 						nil,
@@ -52,11 +34,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opFromAltStack",
 			opFromAltStack,
-			[]test{
+			[]opTest{
 				{
 					"simple",
-					args{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{[]byte{0x00}, []byte{0xff}})},
-					want{
+					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{[]byte{0x00}, []byte{0xff}})},
+					opWant{
 						&stack{[]byte{0x00}, []byte{0xff}},
 						&stack{[]byte{0x00}},
 						nil,
@@ -64,8 +46,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"empty stack",
-					args{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{})},
-					want{
+					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{})},
+					opWant{
 						&stack{[]byte{0x00}},
 						&stack{},
 						ErrInvalidStackOperation,
@@ -76,11 +58,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opIfDup",
 			opIfDup,
-			[]test{
+			[]opTest{
 				{
 					"non zero top stack",
-					args{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x01}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x01}})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x01}, []byte{0x00, 0x00, 0x00, 0x01}},
 						&stack{},
 						nil,
@@ -88,8 +70,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"zero top stack",
-					args{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x00}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x00}})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
@@ -100,11 +82,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opDepth",
 			opDepth,
-			[]test{
+			[]opTest{
 				{
 					"empty stack",
-					args{contextWithStack(&stack{})},
-					want{
+					opArgs{contextWithStack(&stack{})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
@@ -112,8 +94,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"depth 1",
-					args{contextWithStack(&stack{[]byte{0x00}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00}})},
+					opWant{
 						&stack{[]byte{0x00}, []byte{0x01, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
@@ -125,11 +107,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opDrop",
 			opDrop,
-			[]test{
+			[]opTest{
 				{
 					"empty stack",
-					args{contextWithStack(&stack{})},
-					want{
+					opArgs{contextWithStack(&stack{})},
+					opWant{
 						&stack{},
 						&stack{},
 						ErrInvalidStackOperation,
@@ -137,8 +119,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"single value",
-					args{contextWithStack(&stack{[]byte{0x00}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00}})},
+					opWant{
 						&stack{},
 						&stack{},
 						nil,
@@ -149,11 +131,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opDup",
 			opDup,
-			[]test{
+			[]opTest{
 				{
 					"simple",
-					args{contextWithStack(&stack{{0x1}})},
-					want{
+					opArgs{contextWithStack(&stack{{0x1}})},
+					opWant{
 						&stack{{0x1}, {0x1}},
 						&stack{},
 						nil,
@@ -161,8 +143,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"empty stack",
-					args{contextWithStack(&stack{})},
-					want{
+					opArgs{contextWithStack(&stack{})},
+					opWant{
 						&stack{},
 						&stack{},
 						ErrInvalidStackOperation,
@@ -173,11 +155,11 @@ func TestStackOps(t *testing.T) {
 		{
 			"opOver",
 			opOver,
-			[]test{
+			[]opTest{
 				{
 					"simple",
-					args{contextWithStack(&stack{{0x1}, {0x2}})},
-					want{
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					opWant{
 						&stack{{0x1}, {0x2}, {0x1}},
 						&stack{},
 						nil,
@@ -185,8 +167,8 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"too small stack",
-					args{contextWithStack(&stack{{0x1}})},
-					want{
+					opArgs{contextWithStack(&stack{{0x1}})},
+					opWant{
 						&stack{{0x1}},
 						&stack{},
 						ErrInvalidStackOperation,
@@ -196,13 +178,13 @@ func TestStackOps(t *testing.T) {
 		},
 	}
 
-	for _, opTest := range tests {
-		for _, test := range opTest.tests {
+	for _, opTests := range tests {
+		for _, test := range opTests.tests {
 
-			t.Run(opTest.name+" "+test.name, func(t *testing.T) {
-				err := opTest.op(test.args.context)
+			t.Run(opTests.name+" "+test.name, func(t *testing.T) {
+				err := opTests.op(test.args.context)
 				if err != test.want.err {
-					t.Errorf("%s() error = %v, want err %v", opTest.name, err, test.want.err)
+					t.Errorf("%s() error = %v, want err %v", opTests.name, err, test.want.err)
 				}
 
 				if !reflect.DeepEqual(test.want.stack, test.args.context.stack) {

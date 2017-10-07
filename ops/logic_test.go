@@ -6,33 +6,15 @@ import (
 )
 
 func TestLogicOps(t *testing.T) {
-	type args struct {
-		context *context
-	}
-	type want struct {
-		stack *stack
-		alt   *stack
-		err   error
-	}
-	type test struct {
-		name string
-		args args
-		want want
-	}
-
-	tests := []struct {
-		name  string
-		op    Op
-		tests []test
-	}{
+	tests := []opTests{
 		{
 			"opEqual",
 			opEqual,
-			[]test{
+			[]opTest{
 				{
 					"equal",
-					args{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
 						&stack{},
 						nil,
@@ -40,8 +22,8 @@ func TestLogicOps(t *testing.T) {
 				},
 				{
 					"not equal",
-					args{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
@@ -49,8 +31,8 @@ func TestLogicOps(t *testing.T) {
 				},
 				{
 					"not enough arguments",
-					args{contextWithStack(&stack{[]byte{0x01}})},
-					want{
+					opArgs{contextWithStack(&stack{[]byte{0x01}})},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,

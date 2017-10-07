@@ -6,33 +6,16 @@ import (
 )
 
 func TestConstantsOps(t *testing.T) {
-	type args struct {
-		context *context
-	}
-	type want struct {
-		stack *stack
-		alt   *stack
-		err   error
-	}
-	type test struct {
-		name string
-		args args
-		want want
-	}
 
-	tests := []struct {
-		name  string
-		op    Op
-		tests []test
-	}{
+	tests := []opTests{
 		{
 			"opFalse",
 			opFalse,
-			[]test{
+			[]opTest{
 				{
 					"pushes false",
-					args{emptyContext()},
-					want{
+					opArgs{emptyContext()},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x0, 0x00}},
 						&stack{},
 						nil,
@@ -43,11 +26,11 @@ func TestConstantsOps(t *testing.T) {
 		{
 			"op1Negate",
 			op1Negate,
-			[]test{
+			[]opTest{
 				{
 					"pushes negative 1",
-					args{emptyContext()},
-					want{
+					opArgs{emptyContext()},
+					opWant{
 						&stack{[]byte{0x40, 0x00, 0x00, 0x01}},
 						&stack{},
 						nil,
@@ -58,12 +41,12 @@ func TestConstantsOps(t *testing.T) {
 		{
 			"opTrue",
 			opTrue,
-			[]test{
+			[]opTest{
 				//
 				{
 					"pushes 1",
-					args{emptyContext()},
-					want{
+					opArgs{emptyContext()},
+					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
 						&stack{},
 						nil,

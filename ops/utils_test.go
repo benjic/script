@@ -22,6 +22,28 @@ func (c *context) Read(bs []byte) (int, error) { return c.Reader.Read(bs) }
 func (c *context) Size() int                   { return c.stack.Size() }
 func (c *context) SizeAlt() int                { return c.alt.Size() }
 
+type opArgs struct {
+	context *context
+}
+
+type opWant struct {
+	stack *stack
+	alt   *stack
+	err   error
+}
+
+type opTest struct {
+	name string
+	args opArgs
+	want opWant
+}
+
+type opTests struct {
+	name  string
+	op    Op
+	tests []opTest
+}
+
 func emptyContext() *context {
 	return &context{&stack{}, &stack{}, new(bytes.Buffer)}
 }
