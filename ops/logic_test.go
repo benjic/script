@@ -5,47 +5,79 @@ import (
 	"testing"
 )
 
-func Test_equal(t *testing.T) {
+func TestLogicOps(t *testing.T) {
 	type args struct {
-		c *context
+		context *context
 	}
+	type want struct {
+		stack *stack
+		alt   *stack
+		err   error
+	}
+	type test struct {
+		name string
+		args args
+		want want
+	}
+
 	tests := []struct {
-		name    string
-		args    args
-		want    *stack
-		wantErr bool
+		name  string
+		op    Op
+		tests []test
 	}{
 		{
-			"equal",
-			args{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
-			&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
-			false,
-		},
-		{
-			"not equal",
-			args{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
-			&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
-			false,
-		},
-		{
-			"not enough arguments",
-			args{contextWithStack(&stack{[]byte{0x01}})},
-			&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
-			false,
+			"opEqual",
+			opEqual,
+			[]test{
+				{
+					"equal",
+					args{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
+					want{
+						&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
+						&stack{},
+						nil,
+					},
+				},
+				{
+					"not equal",
+					args{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
+					want{
+						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						nil,
+					},
+				},
+				{
+					"not enough arguments",
+					args{contextWithStack(&stack{[]byte{0x01}})},
+					want{
+						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						nil,
+					},
+				},
+			},
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := opEqual(tt.args.c)
+	for _, opTest := range tests {
+		for _, test := range opTest.tests {
 
-			if (err != nil) != tt.wantErr {
-				t.Errorf("opEqual() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			t.Run(opTest.name+" "+test.name, func(t *testing.T) {
+				err := opTest.op(test.args.context)
+				if err != test.want.err {
+					t.Errorf("%s() error = %v, want err %v", opTest.name, err, test.want.err)
+				}
 
-			if !reflect.DeepEqual(tt.args.c.stack, tt.want) {
-				t.Errorf("Want: %+v; Got: %+v", tt.want, tt.args.c)
-			}
-		})
+				if !reflect.DeepEqual(test.want.stack, test.args.context.stack) {
+					t.Errorf("want %v; got %v", test.want.stack, test.args.context.stack)
+				}
+
+				if !reflect.DeepEqual(test.want.alt, test.args.context.alt) {
+					t.Errorf("want %v; got %v", test.want.alt, test.args.context.alt)
+				}
+			})
+
+		}
 	}
 }
