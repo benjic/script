@@ -20,14 +20,14 @@ func TestEvaluate(t *testing.T) {
 		{
 			"top stack value is true",
 			args{bytes.NewReader([]byte{
-				ops.OP_TRUE,
+				ops.OpTrue,
 			})},
 			false,
 		},
 		{
 			"top value is false",
 			args{bytes.NewReader([]byte{
-				ops.OP_FALSE,
+				ops.OpFalse,
 			})},
 			true,
 		},

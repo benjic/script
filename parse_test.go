@@ -39,7 +39,7 @@ func TestParse(t *testing.T) {
 		{
 			"op",
 			args{"OP_FALSE"},
-			[]byte{ops.OP_FALSE},
+			[]byte{ops.OpFalse},
 			false,
 		},
 	}

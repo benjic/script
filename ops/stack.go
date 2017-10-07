@@ -5,15 +5,16 @@ import (
 	"encoding/binary"
 )
 
+// TODO(benjic): Document the operation symbols
 const (
-	OP_TOALTSTACK   uint8 = 0x6b
-	OP_FROMALTSTACK uint8 = 0x6c
-	OP_IFDUP        uint8 = 0x73
-	OP_DEPTH        uint8 = 0x74
-	OP_DROP         uint8 = 0x75
-	OP_DUP          uint8 = 0x76
-	OP_NIP          uint8 = 0x77
-	OP_OVER         uint8 = 0x78
+	OpToAltStack   uint8 = 0x6b
+	OpFromAltStack uint8 = 0x6c
+	OpIfDup        uint8 = 0x73
+	OpDepth        uint8 = 0x74
+	OpDrop         uint8 = 0x75
+	OpDup          uint8 = 0x76
+	OpNip          uint8 = 0x77
+	OpOver         uint8 = 0x78
 )
 
 func opToAltStack(c Context) error {

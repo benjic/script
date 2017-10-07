@@ -5,30 +5,31 @@ import (
 	"fmt"
 )
 
+// TODO(benjic): Document the operation symbols
 const (
-	OP_0         uint8 = 0x00
-	OP_FALSE     uint8 = 0x00
-	OP_PUSHDATA1 uint8 = 0x4c
-	OP_PUSHDATA2 uint8 = 0x4d
-	OP_PUSHDATA4 uint8 = 0x4e
-	OP_1NEGATE   uint8 = 0x4f
-	OP_TRUE      uint8 = 0x51
-	OP_1         uint8 = 0x51
-	OP_2         uint8 = 0x52
-	OP_3         uint8 = 0x53
-	OP_4         uint8 = 0x54
-	OP_5         uint8 = 0x55
-	OP_6         uint8 = 0x56
-	OP_7         uint8 = 0x57
-	OP_8         uint8 = 0x58
-	OP_9         uint8 = 0x59
-	OP_10        uint8 = 0x5a
-	OP_11        uint8 = 0x5b
-	OP_12        uint8 = 0x5c
-	OP_13        uint8 = 0x5d
-	OP_14        uint8 = 0x5e
-	OP_15        uint8 = 0x5f
-	OP_16        uint8 = 0x60
+	Op0         uint8 = 0x00
+	OpFalse     uint8 = 0x00
+	OpPushData1 uint8 = 0x4c
+	OpPushData2 uint8 = 0x4d
+	OpPushData4 uint8 = 0x4e
+	Op1Negate   uint8 = 0x4f
+	OpTrue      uint8 = 0x51
+	Op1         uint8 = 0x51
+	Op2         uint8 = 0x52
+	Op3         uint8 = 0x53
+	Op4         uint8 = 0x54
+	Op5         uint8 = 0x55
+	Op6         uint8 = 0x56
+	Op7         uint8 = 0x57
+	Op8         uint8 = 0x58
+	Op9         uint8 = 0x59
+	Op10        uint8 = 0x5a
+	Op11        uint8 = 0x5b
+	Op12        uint8 = 0x5c
+	Op13        uint8 = 0x5d
+	Op14        uint8 = 0x5e
+	Op15        uint8 = 0x5f
+	Op16        uint8 = 0x60
 )
 
 var (
