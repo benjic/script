@@ -171,7 +171,7 @@ func duplicate(v []byte) []byte {
 	return c
 }
 
-func writeNum(c Context, num int32) error {
+func writeInt(c Context, num int32) error {
 	var buf bytes.Buffer
 	if err := binary.Write(&buf, binary.LittleEndian, &num); err != nil {
 		return err

@@ -65,7 +65,7 @@ func opIfDup(c Context) error {
 }
 
 func opDepth(c Context) error {
-	return writeNum(c, int32(c.Size()))
+	return writeInt(c, int32(c.Size()))
 }
 
 func opDrop(c Context) error {
@@ -82,13 +82,9 @@ func opDup(c Context) error {
 	}
 
 	v := c.Pop()
-	if v != nil {
-		v2 := make([]byte, len(v))
-		copy(v2, v)
-		c.Push(v2)
-	}
-
+	c.Push(duplicate(v))
 	c.Push(v)
+
 	return nil
 }
 

@@ -32,7 +32,11 @@ const (
 )
 
 func op1Add(c Context) error {
-	// TODO: implement me
+	d, err := readInt(c)
+	if err != nil {
+		return err
+	}
+	writeInt(c, d+1)
 	return nil
 }
 

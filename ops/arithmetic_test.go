@@ -6,7 +6,32 @@ import (
 )
 
 func TestArithmeticOps(t *testing.T) {
-	tests := []opTests{}
+	tests := []opTests{
+		{
+			"op1Add",
+			op1Add,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"adds 1 to number",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{7}))},
+					opWant{
+						stackWithNumbers(t, []int32{8}),
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+	}
 
 	for _, opTests := range tests {
 		for _, test := range opTests.tests {
