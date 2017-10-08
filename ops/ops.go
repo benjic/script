@@ -105,6 +105,14 @@ type Context interface {
 	SizeAlt() int
 }
 
+// duplicate creates a copy of a given byte slice.
+func duplicate(v []byte) []byte {
+	c := make([]byte, len(v))
+	copy(c, v)
+
+	return c
+}
+
 func writeNum(c Context, num int32) error {
 	var buf bytes.Buffer
 	if err := binary.Write(&buf, binary.LittleEndian, &num); err != nil {

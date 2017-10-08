@@ -114,9 +114,7 @@ func opOver(c Context) error {
 	c.Push(v2)
 
 	if v1 != nil {
-		v3 := make([]byte, len(v1))
-		copy(v3, v1)
-		c.Push(v3)
+		c.Push(duplicate(v1))
 	}
 
 	return nil
@@ -146,9 +144,7 @@ func opPick(c Context) error {
 		c.Push(tmp[i])
 	}
 
-	v := make([]byte, len(tmp[len(tmp)-1]))
-	copy(v, tmp[len(tmp)-1])
-	c.Push(v)
+	c.Push(duplicate(tmp[len(tmp)-1]))
 
 	return nil
 }
@@ -177,9 +173,7 @@ func opRoll(c Context) error {
 		c.Push(tmp[i])
 	}
 
-	v := make([]byte, len(tmp[len(tmp)-1]))
-	copy(v, tmp[len(tmp)-1])
-	c.Push(v)
+	c.Push(duplicate(tmp[len(tmp)-1]))
 
 	return nil
 }
@@ -201,41 +195,135 @@ func opRot(c Context) error {
 }
 
 func opSwap(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	v1 := c.Pop()
+	v2 := c.Pop()
+
+	c.Push(v1)
+	c.Push(v2)
+
 	return nil
 }
 
 func opTuck(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	v1 := c.Pop()
+	v2 := c.Pop()
+
+	c.Push(duplicate(v1))
+	c.Push(v2)
+	c.Push(v1)
+
 	return nil
 }
 
 func op2Drop(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	c.Pop()
+	c.Pop()
+
 	return nil
 }
 
 func op2Dup(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	v1 := c.Pop()
+	v2 := c.Pop()
+	c.Push(v2)
+	c.Push(v1)
+
+	c.Push(duplicate(v2))
+	c.Push(duplicate(v1))
+
 	return nil
 }
 
 func op3Dup(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 3 {
+		return ErrInvalidStackOperation
+	}
+
+	v1 := c.Pop()
+	v2 := c.Pop()
+	v3 := c.Pop()
+	c.Push(v3)
+	c.Push(v2)
+	c.Push(v1)
+
+	c.Push(duplicate(v3))
+	c.Push(duplicate(v2))
+	c.Push(duplicate(v1))
+
 	return nil
 }
 
 func op2Over(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 4 {
+		return ErrInvalidStackOperation
+	}
+	v1 := c.Pop()
+	v2 := c.Pop()
+	v3 := c.Pop()
+	v4 := c.Pop()
+
+	c.Push(v4)
+	c.Push(v3)
+	c.Push(v2)
+	c.Push(v1)
+
+	c.Push(duplicate(v4))
+	c.Push(duplicate(v3))
+
 	return nil
 }
 
 func op2Rot(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 6 {
+		return ErrInvalidStackOperation
+	}
+	v1 := c.Pop()
+	v2 := c.Pop()
+	v3 := c.Pop()
+	v4 := c.Pop()
+	v5 := c.Pop()
+	v6 := c.Pop()
+
+	c.Push(v2)
+	c.Push(v1)
+
+	c.Push(v6)
+	c.Push(v5)
+	c.Push(v4)
+	c.Push(v3)
+
 	return nil
 }
 
 func op2Swap(c Context) error {
-	// TODO(benjic): Implement me
+	if c.Size() < 4 {
+		return ErrInvalidStackOperation
+	}
+	v1 := c.Pop()
+	v2 := c.Pop()
+	v3 := c.Pop()
+	v4 := c.Pop()
+
+	c.Push(v3)
+	c.Push(v4)
+	c.Push(v1)
+	c.Push(v2)
+
 	return nil
 }

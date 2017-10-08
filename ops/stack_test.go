@@ -334,7 +334,7 @@ func TestStackOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0x2}, {0x1}, {0x0}})},
 					opWant{
-						&stack{{0x1}, {0x2}, {0x0}},
+						&stack{{0x2}, {0x0}, {0x1}},
 						&stack{},
 						nil,
 					},
@@ -380,7 +380,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}})},
+					opArgs{contextWithStack(&stack{{0x3}, {0x2}, {0x1}})},
 					opWant{
 						&stack{{0x3}},
 						&stack{},
@@ -476,9 +476,9 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}, {0x5}, {0x6}})},
+					opArgs{contextWithStack(&stack{{0x6}, {0x5}, {0x4}, {0x3}, {0x2}, {0x1}})},
 					opWant{
-						&stack{{0x3}, {0x4}, {0x5}, {0x6}, {0x1}, {0x2}},
+						&stack{{0x2}, {0x1}, {0x6}, {0x5}, {0x4}, {0x3}},
 						&stack{},
 						nil,
 					},
@@ -502,7 +502,7 @@ func TestStackOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}})},
 					opWant{
-						&stack{{0x3}, {0x4}, {0x1}, {0x2}},
+						&stack{{0x2}, {0x1}, {0x4}, {0x3}},
 						&stack{},
 						nil,
 					},
