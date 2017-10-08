@@ -29,6 +29,16 @@ var (
 			OpNip:          opNip,
 			OpOver:         opOver,
 			OpPick:         opPick,
+			OpRoll:         opRoll,
+			OpRot:          opRot,
+			OpSwap:         opSwap,
+			OpTuck:         opTuck,
+			Op2Drop:        op2Drop,
+			Op2Dup:         op2Dup,
+			Op3Dup:         op3Dup,
+			Op2Over:        op2Over,
+			Op2Rot:         op2Rot,
+			Op2Swap:        op2Swap,
 		},
 		map[string]uint8{
 			// Constants
@@ -51,6 +61,16 @@ var (
 			"OP_NIP":          OpNip,
 			"OP_OVER":         OpOver,
 			"OP_PICK":         OpPick,
+			"OP_ROLL":         OpRoll,
+			"OP_ROT":          OpRot,
+			"OP_SWAP":         OpSwap,
+			"OP_TUCK":         OpTuck,
+			"OP_2DROP":        Op2Drop,
+			"OP_2DUP":         Op2Dup,
+			"OP_3DUP":         Op3Dup,
+			"OP_2OVER":        Op2Over,
+			"OP_2ROT":         Op2Rot,
+			"OP_2SWAP":        Op2Swap,
 		},
 	}
 

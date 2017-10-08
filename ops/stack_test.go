@@ -251,6 +251,264 @@ func TestStackOps(t *testing.T) {
 				},
 			},
 		},
+		{
+			"opRoll",
+			opRoll,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"not enough elements",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 2}))},
+					opWant{
+						stackWithNumbers(t, []int32{0}),
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"negative n",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, -1}))},
+					opWant{
+						&stack{{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{1, 2, 1}))},
+					opWant{
+						stackWithNumbers(t, []int32{2, 1}),
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"opRot",
+			opRot,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x3}, {0x2}, {0x1}})},
+					opWant{
+						&stack{{0x2}, {0x3}, {0x1}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"opSwap",
+			opSwap,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x2}, {0x1}, {0x0}})},
+					opWant{
+						&stack{{0x1}, {0x2}, {0x0}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"opTuck",
+			opTuck,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					opWant{
+						&stack{{0x2}, {0x1}, {0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op2Drop",
+			op2Drop,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}})},
+					opWant{
+						&stack{{0x3}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op2Dup",
+			op2Dup,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					opWant{
+						&stack{{0x1}, {0x2}, {0x1}, {0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op3Dup",
+			op3Dup,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}})},
+					opWant{
+						&stack{{0x1}, {0x2}, {0x3}, {0x1}, {0x2}, {0x3}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op2Over",
+			op2Over,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}})},
+					opWant{
+						&stack{{0x1}, {0x2}, {0x3}, {0x4}, {0x1}, {0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op2Rot",
+			op2Rot,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}, {0x5}, {0x6}})},
+					opWant{
+						&stack{{0x3}, {0x4}, {0x5}, {0x6}, {0x1}, {0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"op2Swap",
+			op2Swap,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}})},
+					opWant{
+						&stack{{0x3}, {0x4}, {0x1}, {0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
 	}
 
 	for _, opTests := range tests {
