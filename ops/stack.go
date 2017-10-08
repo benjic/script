@@ -2,7 +2,6 @@ package ops
 
 import (
 	"bytes"
-	"encoding/binary"
 )
 
 // TODO(benjic): Document the operation symbols
@@ -15,6 +14,7 @@ const (
 	OpDup          uint8 = 0x76
 	OpNip          uint8 = 0x77
 	OpOver         uint8 = 0x78
+	OpPick         uint8 = 0x79
 )
 
 func opToAltStack(c Context) error {
@@ -55,10 +55,7 @@ func opIfDup(c Context) error {
 }
 
 func opDepth(c Context) error {
-	var buf bytes.Buffer
-	binary.Write(&buf, binary.LittleEndian, int32(c.Size()))
-	c.Push(buf.Bytes())
-	return nil
+	return writeNum(c, int32(c.Size()))
 }
 
 func opDrop(c Context) error {
@@ -111,6 +108,37 @@ func opOver(c Context) error {
 		copy(v3, v1)
 		c.Push(v3)
 	}
+
+	return nil
+}
+
+func opPick(c Context) error {
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	n, err := readInt(c)
+	if err != nil {
+		return err
+	}
+
+	if n < 0 || n >= int32(c.Size()) {
+		return ErrInvalidStackOperation
+	}
+
+	tmp := make([][]byte, n+1, n+1)
+
+	for i := range tmp {
+		tmp[i] = c.Pop()
+	}
+
+	for i := len(tmp) - 1; i >= 0; i-- {
+		c.Push(tmp[i])
+	}
+
+	v := make([]byte, len(tmp[len(tmp)-1]))
+	copy(v, tmp[len(tmp)-1])
+	c.Push(v)
 
 	return nil
 }

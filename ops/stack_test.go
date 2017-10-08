@@ -96,16 +96,16 @@ func TestStackOps(t *testing.T) {
 					"empty stack",
 					opArgs{contextWithStack(&stack{})},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+						stackWithNumbers(t, []int32{0}),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"depth 1",
-					opArgs{contextWithStack(&stack{[]byte{0x00}})},
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{0}))},
 					opWant{
-						&stack{[]byte{0x00}, []byte{0x01, 0x00, 0x00, 0x00}},
+						stackWithNumbers(t, []int32{0, 1}),
 						&stack{},
 						nil,
 					},
@@ -203,6 +203,48 @@ func TestStackOps(t *testing.T) {
 					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
 					opWant{
 						&stack{{0x2}},
+						&stack{},
+						nil,
+					},
+				},
+			},
+		},
+		{
+			"opPick",
+			opPick,
+			[]opTest{
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"not enough elements",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 2}))},
+					opWant{
+						stackWithNumbers(t, []int32{0}),
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"negative n",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, -1}))},
+					opWant{
+						&stack{{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"simple",
+					opArgs{contextWithStack(stackWithNumbers(t, []int32{1, 2, 1}))},
+					opWant{
+						stackWithNumbers(t, []int32{1, 2, 1}),
 						&stack{},
 						nil,
 					},
