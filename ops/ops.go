@@ -1,6 +1,8 @@
 package ops
 
 import (
+	"bytes"
+	"encoding/binary"
 	"io"
 )
 
@@ -25,6 +27,8 @@ var (
 			OpDepth:        opDepth,
 			OpDup:          opDup,
 			OpNip:          opNip,
+			OpOver:         opOver,
+			OpPick:         opPick,
 		},
 		map[string]uint8{
 			// Constants
@@ -45,6 +49,8 @@ var (
 			"OP_DEPTH":        OpDepth,
 			"OP_DUP":          OpDup,
 			"OP_NIP":          OpNip,
+			"OP_OVER":         OpOver,
+			"OP_PICK":         OpPick,
 		},
 	}
 
@@ -77,4 +83,26 @@ type Context interface {
 
 	Size() int
 	SizeAlt() int
+}
+
+func writeNum(c Context, num int32) error {
+	var buf bytes.Buffer
+	if err := binary.Write(&buf, binary.LittleEndian, &num); err != nil {
+		return err
+	}
+
+	c.Push(buf.Bytes())
+
+	return nil
+}
+
+func readInt(c Context) (d int32, err error) {
+	if c.Size() < 1 {
+		return d, ErrInvalidStackOperation
+	}
+
+	buf := bytes.NewBuffer(c.Pop())
+	err = binary.Read(buf, binary.LittleEndian, &d)
+
+	return d, err
 }

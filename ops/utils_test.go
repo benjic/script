@@ -2,7 +2,9 @@ package ops
 
 import (
 	"bytes"
+	"encoding/binary"
 	"io"
+	"testing"
 )
 
 // A Stack is a FIFO data structure which orders data.
@@ -42,6 +44,29 @@ type opTests struct {
 	name  string
 	op    Op
 	tests []opTest
+}
+
+func num(t *testing.T, n int32) []byte {
+	var buf bytes.Buffer
+	if err := binary.Write(&buf, binary.LittleEndian, &n); err != nil {
+		t.Errorf("Unable to get bytes for %+v", n)
+		return nil
+	}
+	return buf.Bytes()
+}
+
+func stackWithNumbers(t *testing.T, ns []int32) *stack {
+	s := &stack{}
+
+	for _, n := range ns {
+		var buf bytes.Buffer
+		if err := binary.Write(&buf, binary.LittleEndian, &n); err != nil {
+			t.Errorf("Cannot parse number %d", n)
+		}
+		s.Push(buf.Bytes())
+	}
+
+	return s
 }
 
 func emptyContext() *context {
