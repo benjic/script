@@ -39,6 +39,35 @@ var (
 			Op2Over:        op2Over,
 			Op2Rot:         op2Rot,
 			Op2Swap:        op2Swap,
+
+			// Arithmetic
+			Op1Add:               op1Add,
+			Op1Sub:               op1Sub,
+			Op2Mul:               op2Mul,
+			Op2Div:               op2Div,
+			OpNegate:             opNegate,
+			OpAbs:                opAbs,
+			OpNot:                opNot,
+			Op0NotEqual:          op0NotEqual,
+			OpAdd:                opAdd,
+			OpSub:                opSub,
+			OpMul:                opMul,
+			OpDiv:                opDiv,
+			OpMod:                opMod,
+			OpLShift:             opLShift,
+			OpRShift:             opRShift,
+			OpBoolAnd:            opBoolAnd,
+			OpBoolOr:             opBoolOr,
+			OpNumEqual:           opNumEqual,
+			OpNumEqualVerify:     opNumEqualVerify,
+			OpNumNotEqual:        opNumNotEqual,
+			OpLessThan:           opLessThan,
+			OpGreaterThan:        opGreaterThan,
+			OpLessThanOrEqual:    opLessThanOrEqual,
+			OpGreaterThanOrEqual: opGreaterThanOrEqual,
+			OpMin:                opMin,
+			OpMax:                opMax,
+			OpWithin:             opWithin,
 		},
 		map[string]uint8{
 			// Constants
@@ -71,6 +100,35 @@ var (
 			"OP_2OVER":        Op2Over,
 			"OP_2ROT":         Op2Rot,
 			"OP_2SWAP":        Op2Swap,
+
+			// Arithmetic
+			"OP_1ADD":               Op1Add,
+			"OP_1SUB":               Op1Sub,
+			"OP_2MUL":               Op2Mul,
+			"OP_2DIV":               Op2Div,
+			"OP_NEGATE":             OpNegate,
+			"OP_ABS":                OpAbs,
+			"OP_NOT":                OpNot,
+			"OP_0NOTEQUAL":          Op0NotEqual,
+			"OP_ADD":                OpAdd,
+			"OP_SUB":                OpSub,
+			"OP_MUL":                OpMul,
+			"OP_DIV":                OpDiv,
+			"OP_MOD":                OpMod,
+			"OP_LSHIFT":             OpLShift,
+			"OP_RSHIFT":             OpRShift,
+			"OP_BOOLAND":            OpBoolAnd,
+			"OP_BOOLOR":             OpBoolOr,
+			"OP_NUMEQUAL":           OpNumEqual,
+			"OP_NUMEQUALVERIFY":     OpNumEqualVerify,
+			"OP_NUMNOTEQUAL":        OpNumNotEqual,
+			"OP_LESSTHAN":           OpLessThan,
+			"OP_GREATERTHAN":        OpGreaterThan,
+			"OP_LESSTHANOREQUAL":    OpLessThanOrEqual,
+			"OP_GREATERTHANOREQUAL": OpGreaterThanOrEqual,
+			"OP_MIN":                OpMin,
+			"OP_MAX":                OpMax,
+			"OP_WITHIN":             OpWithin,
 		},
 	}
 
@@ -113,7 +171,7 @@ func duplicate(v []byte) []byte {
 	return c
 }
 
-func writeNum(c Context, num int32) error {
+func writeInt(c Context, num int32) error {
 	var buf bytes.Buffer
 	if err := binary.Write(&buf, binary.LittleEndian, &num); err != nil {
 		return err
