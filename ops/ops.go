@@ -40,6 +40,13 @@ var (
 			Op2Rot:         op2Rot,
 			Op2Swap:        op2Swap,
 
+			// Splice
+			OpCat:    opCat,
+			OpSubstr: opSubstr,
+			OpLeft:   opLeft,
+			OpRight:  opRight,
+			OpSize:   opSize,
+
 			// Arithmetic
 			Op1Add:               op1Add,
 			Op1Sub:               op1Sub,
@@ -100,6 +107,14 @@ var (
 			"OP_2OVER":        Op2Over,
 			"OP_2ROT":         Op2Rot,
 			"OP_2SWAP":        Op2Swap,
+
+			// Splice
+
+			"OP_CAT":    OpCat,
+			"OP_SUBSTR": OpSubstr,
+			"OP_LEFT":   OpLeft,
+			"OP_RIGHT":  OpRight,
+			"OP_SIZE":   OpSize,
 
 			// Arithmetic
 			"OP_1ADD":               Op1Add,
