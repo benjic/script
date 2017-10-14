@@ -587,7 +587,33 @@ func TestArithmeticOps(t *testing.T) {
 			"opNumEqualVerify",
 			opNumEqualVerify,
 			[]opTest{
-			// TODO(benjic): Implement when OP_VERIfY is available
+				{
+					"empty stack",
+					opArgs{emptyContext()},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+				{
+					"equal",
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					opWant{
+						&stack{},
+						&stack{},
+						nil,
+					},
+				},
+				{
+					"not equal",
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrNumEqualVerify,
+					},
+				},
 			},
 		},
 		{

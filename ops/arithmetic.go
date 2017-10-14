@@ -1,7 +1,5 @@
 package ops
 
-import "errors"
-
 // TODO(benjic): Document operation descriptions
 const (
 	Op1Add               uint8 = 0x8b
@@ -168,8 +166,27 @@ func opNumEqual(c Context) error {
 }
 
 func opNumEqualVerify(c Context) error {
-	// TODO(benjic): implement when OP_VERIFY is available
-	return errors.New("unimplemented")
+	err := binaryOp(c, func(a, b int32) int32 {
+		if a == b {
+			return 1
+		}
+
+		return 0
+	})
+	if err != nil {
+		return err
+	}
+
+	b, err := readBool(c)
+	if err != nil {
+		return err
+	}
+
+	if !b {
+		return ErrNumEqualVerify
+	}
+
+	return nil
 }
 
 func opNumNotEqual(c Context) error {

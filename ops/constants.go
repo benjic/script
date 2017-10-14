@@ -39,6 +39,12 @@ var (
 
 	// ErrVerify indicates an OpVerify operation failed.
 	ErrVerify = errors.New("script failed an OP_VERIFY operation")
+
+	// ErrEqualVerify indicates an OpEqualVerify operation has failed.
+	ErrEqualVerify = errors.New("script failed an OP_EQUALVERIFY operation")
+
+	// ErrNumEqualVerify indicates an OpNumEqualVerify has failed.
+	ErrNumEqualVerify = errors.New("script failed an OP_NUMEQUALVERIFY operation")
 )
 
 func createOpPushNBytes(n uint8) Op {
