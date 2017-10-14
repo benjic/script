@@ -22,9 +22,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"adds 1 to number",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{8}),
+						stackWithNumbers(t, 8),
 						&stack{},
 						nil,
 					},
@@ -46,9 +46,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"adds 1 to number",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{6}),
+						stackWithNumbers(t, 6),
 						&stack{},
 						nil,
 					},
@@ -70,9 +70,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"multiplies number by 2",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{14}),
+						stackWithNumbers(t, 14),
 						&stack{},
 						nil,
 					},
@@ -94,9 +94,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"divides number by 2",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{3}),
+						stackWithNumbers(t, 3),
 						&stack{},
 						nil,
 					},
@@ -118,18 +118,18 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"makes negatives positive",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"makes positives negative",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{-1}),
+						stackWithNumbers(t, -1),
 						&stack{},
 						nil,
 					},
@@ -151,27 +151,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negatives",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-4}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -4))},
 					opWant{
-						stackWithNumbers(t, []int32{4}),
+						stackWithNumbers(t, 4),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"positives",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{4}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 4))},
 					opWant{
-						stackWithNumbers(t, []int32{4}),
+						stackWithNumbers(t, 4),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -193,27 +193,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"true when less than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -2))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"false when zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"false when greater than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -235,27 +235,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"true when less than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -2))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"false when zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"true when greater than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -277,9 +277,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{2, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 2, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{4}),
+						stackWithNumbers(t, 4),
 						&stack{},
 						nil,
 					},
@@ -301,9 +301,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{4, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{2}),
+						stackWithNumbers(t, 2),
 						&stack{},
 						nil,
 					},
@@ -325,9 +325,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{4, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{8}),
+						stackWithNumbers(t, 8),
 						&stack{},
 						nil,
 					},
@@ -349,9 +349,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{12, 3}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 12, 3))},
 					opWant{
-						stackWithNumbers(t, []int32{4}),
+						stackWithNumbers(t, 4),
 						&stack{},
 						nil,
 					},
@@ -373,9 +373,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{12, 5}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 12, 5))},
 					opWant{
-						stackWithNumbers(t, []int32{2}),
+						stackWithNumbers(t, 2),
 						&stack{},
 						nil,
 					},
@@ -397,18 +397,18 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negative",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{-4}),
+						stackWithNumbers(t, -4),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"positive",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{4}),
+						stackWithNumbers(t, 4),
 						&stack{},
 						nil,
 					},
@@ -430,18 +430,18 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negative",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-4, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -4, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{-1}),
+						stackWithNumbers(t, -1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"positive",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{4, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -463,36 +463,36 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"both not zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"a zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"b zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1, 0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -514,36 +514,36 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"both not zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"a zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"b zero",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{-1, 0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, -1, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -565,18 +565,18 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -605,18 +605,18 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -638,27 +638,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -680,27 +680,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -722,27 +722,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -764,27 +764,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
@@ -806,27 +806,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"left",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{7}),
+						stackWithNumbers(t, 7),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"right",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{7}),
+						stackWithNumbers(t, 7),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"same",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{7}),
+						stackWithNumbers(t, 7),
 						&stack{},
 						nil,
 					},
@@ -848,27 +848,27 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"left",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
 					opWant{
-						stackWithNumbers(t, []int32{8}),
+						stackWithNumbers(t, 8),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"right",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{8}),
+						stackWithNumbers(t, 8),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"same",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 8}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 8))},
 					opWant{
-						stackWithNumbers(t, []int32{8}),
+						stackWithNumbers(t, 8),
 						&stack{},
 						nil,
 					},
@@ -890,45 +890,45 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{6, 7, 9}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 6, 7, 9))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"min inclusive",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{7, 7, 9}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 7, 7, 9))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"within",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{8, 7, 9}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 8, 7, 9))},
 					opWant{
-						stackWithNumbers(t, []int32{1}),
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"max exclusive",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{9, 7, 9}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 9, 7, 9))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{10, 7, 9}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 10, 7, 9))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},

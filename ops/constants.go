@@ -36,6 +36,9 @@ var (
 	// ErrInvalidStackOperation indicates an operation was attempted against a
 	// stack with an invalid size.
 	ErrInvalidStackOperation = errors.New("operation not valid with the current stack size")
+
+	// ErrVerify indicates an OpVerify operation failed.
+	ErrVerify = errors.New("script failed an OP_VERIFY operation")
 )
 
 func createOpPushNBytes(n uint8) Op {

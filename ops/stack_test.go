@@ -96,16 +96,16 @@ func TestStackOps(t *testing.T) {
 					"empty stack",
 					opArgs{contextWithStack(&stack{})},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"depth 1",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0))},
 					opWant{
-						stackWithNumbers(t, []int32{0, 1}),
+						stackWithNumbers(t, 0, 1),
 						&stack{},
 						nil,
 					},
@@ -224,16 +224,16 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"not enough elements",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						ErrInvalidStackOperation,
 					},
 				},
 				{
 					"negative n",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, -1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, -1))},
 					opWant{
 						&stack{{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
@@ -242,9 +242,9 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1, 2, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1, 2, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{1, 2, 1}),
+						stackWithNumbers(t, 1, 2, 1),
 						&stack{},
 						nil,
 					},
@@ -266,16 +266,16 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"not enough elements",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, 2}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, 2))},
 					opWant{
-						stackWithNumbers(t, []int32{0}),
+						stackWithNumbers(t, 0),
 						&stack{},
 						ErrInvalidStackOperation,
 					},
 				},
 				{
 					"negative n",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{0, -1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 0, -1))},
 					opWant{
 						&stack{{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
@@ -284,9 +284,9 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, []int32{1, 2, 1}))},
+					opArgs{contextWithStack(stackWithNumbers(t, 1, 2, 1))},
 					opWant{
-						stackWithNumbers(t, []int32{2, 1}),
+						stackWithNumbers(t, 2, 1),
 						&stack{},
 						nil,
 					},
