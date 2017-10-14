@@ -55,7 +55,7 @@ func num(t *testing.T, n int32) []byte {
 	return buf.Bytes()
 }
 
-func stackWithNumbers(t *testing.T, ns []int32) *stack {
+func stackWithNumbers(t *testing.T, ns ...int32) *stack {
 	s := &stack{}
 
 	for _, n := range ns {

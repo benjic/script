@@ -29,8 +29,9 @@ const (
 	// [x1, x2] => [x1 == x2]
 	OpEqual uint8 = 0x87
 
-	// OpEqualVerify uint8 = 0x88
-	// TODO(benjic): Implement when VERIFY exists
+	// OpEqualVerify return 1 if inputs are exactly equal, otherwise 0. If zero
+	// is returned an ErrVerify is returned.
+	OpEqualVerify uint8 = 0x88
 )
 
 func opInvert(c Context) error {
@@ -62,10 +63,24 @@ func opXor(c Context) error {
 }
 
 func opEqual(c Context) error {
-	if bytes.Equal(c.Pop(), c.Pop()) {
-		c.Push([]byte{0x00, 0x00, 0x00, 0x01})
-	} else {
-		c.Push([]byte{0x00, 0x00, 0x00, 0x00})
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	return writeBool(c, bytes.Equal(c.Pop(), c.Pop()))
+
+}
+
+func opEqualVerify(c Context) error {
+	if c.Size() < 2 {
+		return ErrInvalidStackOperation
+	}
+
+	e := bytes.Equal(c.Pop(), c.Pop())
+	writeBool(c, e)
+
+	if !e {
+		return ErrEqualVerify
 	}
 
 	return nil

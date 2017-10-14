@@ -207,3 +207,25 @@ func readInt(c Context) (d int32, err error) {
 
 	return d, err
 }
+
+func readBool(c Context) (bool, error) {
+	if c.Size() < 1 {
+		return false, ErrInvalidStackOperation
+	}
+
+	for _, b := range c.Pop() {
+		if b != 0x00 {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func writeBool(c Context, b bool) error {
+	if b {
+		return writeInt(c, 1)
+	}
+
+	return writeInt(c, 0)
+}

@@ -13,29 +13,62 @@ func TestLogicOps(t *testing.T) {
 			[]opTest{
 				{
 					"equal",
-					opArgs{contextWithStack(&stack{[]byte{0x00}, []byte{0x00}})},
+					opArgs{contextWithStack(&stack{{0x00}, {0x00}})},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
+						&stack{{0x01, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(&stack{[]byte{0x00}, []byte{0x01}})},
+					opArgs{contextWithStack(&stack{{0x00}, {0x01}})},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+						&stack{{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
 					},
 				},
 				{
 					"not enough arguments",
-					opArgs{contextWithStack(&stack{[]byte{0x01}})},
+					opArgs{contextWithStack(&stack{{0x01}})},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
+						&stack{{0x01}},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+			},
+		},
+		{
+			"opEqualVerify",
+			opEqualVerify,
+			[]opTest{
+				{
+					"equal",
+					opArgs{contextWithStack(&stack{{0x00}, {0x00}})},
+					opWant{
+						&stack{{0x01, 0x00, 0x00, 0x00}},
 						&stack{},
 						nil,
+					},
+				},
+				{
+					"not equal",
+					opArgs{contextWithStack(&stack{{0x00}, {0x01}})},
+					opWant{
+						&stack{{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						ErrEqualVerify,
+					},
+				},
+				{
+					"not enough arguments",
+					opArgs{contextWithStack(&stack{{0x01}})},
+					opWant{
+						&stack{{0x01}},
+						&stack{},
+						ErrInvalidStackOperation,
 					},
 				},
 			},
@@ -57,7 +90,7 @@ func TestLogicOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0, 0xF0}})},
 					opWant{
-						&stack{[]byte{0x0F, 0x0F, 0x0F}},
+						&stack{{0x0F, 0x0F, 0x0F}},
 						&stack{},
 						nil,
 					},
@@ -81,7 +114,7 @@ func TestLogicOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0, 0xF0}, {0x00, 0xFF, 0xF0}})},
 					opWant{
-						&stack{[]byte{0x00, 0xF0, 0xF0}},
+						&stack{{0x00, 0xF0, 0xF0}},
 						&stack{},
 						nil,
 					},
@@ -105,7 +138,7 @@ func TestLogicOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0, 0xF0}, {0x00, 0xFF, 0xF0}})},
 					opWant{
-						&stack{[]byte{0xF0, 0xFF, 0xF0}},
+						&stack{{0xF0, 0xFF, 0xF0}},
 						&stack{},
 						nil,
 					},
@@ -129,7 +162,7 @@ func TestLogicOps(t *testing.T) {
 					"simple",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0, 0xF0}, {0x00, 0xFF, 0xF0}})},
 					opWant{
-						&stack{[]byte{0xF0, 0x0F, 0x00}},
+						&stack{{0xF0, 0x0F, 0x00}},
 						&stack{},
 						nil,
 					},
@@ -138,7 +171,7 @@ func TestLogicOps(t *testing.T) {
 					"small x1",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0}, {0x00, 0xFF, 0xF0}})},
 					opWant{
-						&stack{[]byte{0xF0, 0x0F}},
+						&stack{{0xF0, 0x0F}},
 						&stack{},
 						nil,
 					},
@@ -147,7 +180,7 @@ func TestLogicOps(t *testing.T) {
 					"small x2",
 					opArgs{contextWithStack(&stack{{0xF0, 0xF0, 0xF0}, {0x00, 0xFF}})},
 					opWant{
-						&stack{[]byte{0xF0, 0x0F}},
+						&stack{{0xF0, 0x0F}},
 						&stack{},
 						nil,
 					},
