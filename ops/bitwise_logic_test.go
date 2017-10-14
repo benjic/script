@@ -41,6 +41,39 @@ func TestLogicOps(t *testing.T) {
 			},
 		},
 		{
+			"opEqualVerify",
+			opEqualVerify,
+			[]opTest{
+				{
+					"equal",
+					opArgs{contextWithStack(&stack{{0x00}, {0x00}})},
+					opWant{
+						&stack{{0x01, 0x00, 0x00, 0x00}},
+						&stack{},
+						nil,
+					},
+				},
+				{
+					"not equal",
+					opArgs{contextWithStack(&stack{{0x00}, {0x01}})},
+					opWant{
+						&stack{{0x00, 0x00, 0x00, 0x00}},
+						&stack{},
+						ErrEqualVerify,
+					},
+				},
+				{
+					"not enough arguments",
+					opArgs{contextWithStack(&stack{{0x01}})},
+					opWant{
+						&stack{{0x01}},
+						&stack{},
+						ErrInvalidStackOperation,
+					},
+				},
+			},
+		},
+		{
 			"opInvert",
 			opInvert,
 			[]opTest{
