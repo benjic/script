@@ -109,7 +109,7 @@ func opRight(c Context) error {
 		return ErrInvalidStackOperation
 	}
 
-	c.Push([]byte(in[size:len(in)]))
+	c.Push([]byte(in[size:]))
 	return nil
 }
 
