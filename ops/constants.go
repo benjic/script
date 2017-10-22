@@ -2,7 +2,6 @@ package ops
 
 import (
 	"errors"
-	"fmt"
 )
 
 // TODO(benjic): Document the operation symbols
@@ -45,6 +44,10 @@ var (
 
 	// ErrNumEqualVerify indicates an OpNumEqualVerify has failed.
 	ErrNumEqualVerify = errors.New("script failed an OP_NUMEQUALVERIFY operation")
+
+	// ErrInsufficientNumberOfBytes indicates a push the number of bytes was unsuccessful
+	// due to the reader failing to supply the number of bytes.
+	ErrInsufficientNumberOfBytes = errors.New("insufficient number of bytes available")
 )
 
 func createOpPushNBytes(n uint8) Op {
@@ -61,7 +64,7 @@ func createOpPushNBytes(n uint8) Op {
 		}
 
 		if cnt != int(n) {
-			return fmt.Errorf("Insufficient number of bytes available")
+			return ErrInsufficientNumberOfBytes
 		}
 
 		c.Push(bs)
@@ -72,22 +75,18 @@ func createOpPushNBytes(n uint8) Op {
 
 func createOpPushN(n uint8) Op {
 	return func(c Context) error {
-		c.Push([]byte{0x00, 0x00, 0x00, n})
-		return nil
+		return writeInt(c, int32(n))
 	}
 }
 
 func opFalse(c Context) error {
-	c.Push([]byte{0x00, 0x00, 0x0, 0x00})
-	return nil
+	return writeBool(c, false)
 }
 
 func op1Negate(c Context) error {
-	c.Push([]byte{0x40, 0x00, 0x00, 0x01})
-	return nil
+	return writeInt(c, -1)
 }
 
 func opTrue(c Context) error {
-	c.Push([]byte{0x00, 0x00, 0x00, 0x01})
-	return nil
+	return writeBool(c, true)
 }
