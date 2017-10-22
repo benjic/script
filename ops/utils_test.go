@@ -62,9 +62,9 @@ func stackWithNumbers(t *testing.T, ns ...int32) *stack {
 }
 
 type config struct {
-	stack    *stack
-	alt      *stack
-	buf      []byte
+	stack *stack
+	alt   *stack
+	buf   []byte
 }
 
 func runOpTests(t *testing.T, tests []opTests) {
