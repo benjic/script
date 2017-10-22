@@ -1,19 +1,18 @@
 package ops
 
 import (
-	"reflect"
 	"testing"
 )
 
 func TestArithmeticOps(t *testing.T) {
-	tests := []opTests{
+	runOpTests(t, []opTests{
 		{
 			"op1Add",
 			op1Add,
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -22,7 +21,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"adds 1 to number",
-					opArgs{contextWithStack(stackWithNumbers(t, 7))},
+					config{stack: stackWithNumbers(t, 7)},
 					opWant{
 						stackWithNumbers(t, 8),
 						&stack{},
@@ -37,7 +36,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -46,7 +45,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"adds 1 to number",
-					opArgs{contextWithStack(stackWithNumbers(t, 7))},
+					config{stack: stackWithNumbers(t, 7)},
 					opWant{
 						stackWithNumbers(t, 6),
 						&stack{},
@@ -61,7 +60,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -70,7 +69,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"multiplies number by 2",
-					opArgs{contextWithStack(stackWithNumbers(t, 7))},
+					config{
+						stack: stackWithNumbers(t, 7),
+					},
 					opWant{
 						stackWithNumbers(t, 14),
 						&stack{},
@@ -85,7 +86,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -94,7 +95,9 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"divides number by 2",
-					opArgs{contextWithStack(stackWithNumbers(t, 7))},
+					config{
+						stack: stackWithNumbers(t, 7),
+					},
 					opWant{
 						stackWithNumbers(t, 3),
 						&stack{},
@@ -109,7 +112,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -118,7 +121,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"makes negatives positive",
-					opArgs{contextWithStack(stackWithNumbers(t, -1))},
+					config{stack: stackWithNumbers(t, -1)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -127,7 +130,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"makes positives negative",
-					opArgs{contextWithStack(stackWithNumbers(t, 1))},
+					config{stack: stackWithNumbers(t, 1)},
 					opWant{
 						stackWithNumbers(t, -1),
 						&stack{},
@@ -142,7 +145,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -151,7 +154,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negatives",
-					opArgs{contextWithStack(stackWithNumbers(t, -4))},
+					config{stack: stackWithNumbers(t, -4)},
 					opWant{
 						stackWithNumbers(t, 4),
 						&stack{},
@@ -160,7 +163,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"positives",
-					opArgs{contextWithStack(stackWithNumbers(t, 4))},
+					config{stack: stackWithNumbers(t, 4)},
 					opWant{
 						stackWithNumbers(t, 4),
 						&stack{},
@@ -169,7 +172,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0))},
+					config{stack: stackWithNumbers(t, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -184,7 +187,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -193,7 +196,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"true when less than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -2))},
+					config{stack: stackWithNumbers(t, -2)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -202,7 +205,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"false when zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0))},
+					config{stack: stackWithNumbers(t, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -211,7 +214,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"false when greater than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 1))},
+					config{stack: stackWithNumbers(t, 1)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -226,7 +229,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -235,7 +238,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"true when less than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -2))},
+					config{stack: stackWithNumbers(t, -2)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -244,7 +247,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"false when zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0))},
+					config{stack: stackWithNumbers(t, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -253,7 +256,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"true when greater than zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 1))},
+					config{stack: stackWithNumbers(t, 1)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -268,7 +271,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -277,7 +280,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 2, 2))},
+					config{stack: stackWithNumbers(t, 2, 2)},
 					opWant{
 						stackWithNumbers(t, 4),
 						&stack{},
@@ -292,7 +295,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -301,7 +304,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
+					config{stack: stackWithNumbers(t, 4, 2)},
 					opWant{
 						stackWithNumbers(t, 2),
 						&stack{},
@@ -316,7 +319,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -325,7 +328,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
+					config{stack: stackWithNumbers(t, 4, 2)},
 					opWant{
 						stackWithNumbers(t, 8),
 						&stack{},
@@ -340,7 +343,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -349,7 +352,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 12, 3))},
+					config{stack: stackWithNumbers(t, 12, 3)},
 					opWant{
 						stackWithNumbers(t, 4),
 						&stack{},
@@ -364,7 +367,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -373,7 +376,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 12, 5))},
+					config{stack: stackWithNumbers(t, 12, 5)},
 					opWant{
 						stackWithNumbers(t, 2),
 						&stack{},
@@ -388,7 +391,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -397,7 +400,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negative",
-					opArgs{contextWithStack(stackWithNumbers(t, -1, 2))},
+					config{stack: stackWithNumbers(t, -1, 2)},
 					opWant{
 						stackWithNumbers(t, -4),
 						&stack{},
@@ -406,7 +409,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"positive",
-					opArgs{contextWithStack(stackWithNumbers(t, 1, 2))},
+					config{stack: stackWithNumbers(t, 1, 2)},
 					opWant{
 						stackWithNumbers(t, 4),
 						&stack{},
@@ -421,7 +424,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -430,7 +433,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"negative",
-					opArgs{contextWithStack(stackWithNumbers(t, -4, 2))},
+					config{stack: stackWithNumbers(t, -4, 2)},
 					opWant{
 						stackWithNumbers(t, -1),
 						&stack{},
@@ -439,7 +442,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"positive",
-					opArgs{contextWithStack(stackWithNumbers(t, 4, 2))},
+					config{stack: stackWithNumbers(t, 4, 2)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -454,7 +457,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -463,7 +466,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 0))},
+					config{stack: stackWithNumbers(t, 0, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -472,7 +475,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both not zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -1, 1))},
+					config{stack: stackWithNumbers(t, -1, 1)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -481,7 +484,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"a zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 1))},
+					config{stack: stackWithNumbers(t, 0, 1)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -490,7 +493,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"b zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -1, 0))},
+					config{stack: stackWithNumbers(t, -1, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -505,7 +508,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -514,7 +517,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 0))},
+					config{stack: stackWithNumbers(t, 0, 0)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -523,7 +526,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"both not zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -1, 1))},
+					config{stack: stackWithNumbers(t, -1, 1)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -532,7 +535,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"a zero",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 1))},
+					config{stack: stackWithNumbers(t, 0, 1)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -541,7 +544,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"b zero",
-					opArgs{contextWithStack(stackWithNumbers(t, -1, 0))},
+					config{stack: stackWithNumbers(t, -1, 0)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -556,7 +559,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -565,7 +568,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -574,7 +577,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -589,7 +592,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -598,7 +601,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						&stack{},
 						&stack{},
@@ -607,7 +610,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						&stack{},
 						&stack{},
@@ -622,7 +625,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -631,7 +634,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -640,7 +643,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"not equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -655,7 +658,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -664,7 +667,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -673,7 +676,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -682,7 +685,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -697,7 +700,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -706,7 +709,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -715,7 +718,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -724,7 +727,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -739,7 +742,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -748,7 +751,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -757,7 +760,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -766,7 +769,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -781,7 +784,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -790,7 +793,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"equal",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -799,7 +802,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -808,7 +811,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -823,7 +826,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -832,7 +835,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"left",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 7),
 						&stack{},
@@ -841,7 +844,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"right",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 7),
 						&stack{},
@@ -850,7 +853,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"same",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7))},
+					config{stack: stackWithNumbers(t, 7, 7)},
 					opWant{
 						stackWithNumbers(t, 7),
 						&stack{},
@@ -865,7 +868,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -874,7 +877,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"left",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7))},
+					config{stack: stackWithNumbers(t, 8, 7)},
 					opWant{
 						stackWithNumbers(t, 8),
 						&stack{},
@@ -883,7 +886,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"right",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 8))},
+					config{stack: stackWithNumbers(t, 7, 8)},
 					opWant{
 						stackWithNumbers(t, 8),
 						&stack{},
@@ -892,7 +895,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"same",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 8))},
+					config{stack: stackWithNumbers(t, 8, 8)},
 					opWant{
 						stackWithNumbers(t, 8),
 						&stack{},
@@ -907,7 +910,7 @@ func TestArithmeticOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -916,7 +919,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"less than",
-					opArgs{contextWithStack(stackWithNumbers(t, 6, 7, 9))},
+					config{stack: stackWithNumbers(t, 6, 7, 9)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -925,7 +928,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"min inclusive",
-					opArgs{contextWithStack(stackWithNumbers(t, 7, 7, 9))},
+					config{stack: stackWithNumbers(t, 7, 7, 9)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -934,7 +937,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"within",
-					opArgs{contextWithStack(stackWithNumbers(t, 8, 7, 9))},
+					config{stack: stackWithNumbers(t, 8, 7, 9)},
 					opWant{
 						stackWithNumbers(t, 1),
 						&stack{},
@@ -943,7 +946,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"max exclusive",
-					opArgs{contextWithStack(stackWithNumbers(t, 9, 7, 9))},
+					config{stack: stackWithNumbers(t, 9, 7, 9)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -952,7 +955,7 @@ func TestArithmeticOps(t *testing.T) {
 				},
 				{
 					"greater than",
-					opArgs{contextWithStack(stackWithNumbers(t, 10, 7, 9))},
+					config{stack: stackWithNumbers(t, 10, 7, 9)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -961,25 +964,6 @@ func TestArithmeticOps(t *testing.T) {
 				},
 			},
 		},
-	}
-
-	for _, opTests := range tests {
-		for _, test := range opTests.tests {
-
-			t.Run(opTests.name+" "+test.name, func(t *testing.T) {
-				err := opTests.op(test.args.context)
-				if err != test.want.err {
-					t.Errorf("%s() error = %v, want err %v", opTests.name, err, test.want.err)
-				}
-
-				if !reflect.DeepEqual(test.want.stack, test.args.context.stack) {
-					t.Errorf("want %v; got %v", test.want.stack, test.args.context.stack)
-				}
-
-				if !reflect.DeepEqual(test.want.alt, test.args.context.alt) {
-					t.Errorf("want %v; got %v", test.want.alt, test.args.context.alt)
-				}
-			})
-		}
-	}
+	},
+	)
 }

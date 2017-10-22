@@ -1,22 +1,22 @@
 package ops
 
 import (
-	"reflect"
+	"io"
 	"testing"
 )
 
 func TestConstantsOps(t *testing.T) {
 
-	tests := []opTests{
+	runOpTests(t, []opTests{
 		{
 			"opFalse",
 			opFalse,
 			[]opTest{
 				{
 					"pushes false",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x0, 0x00}},
+						stackWithNumbers(t, 0),
 						&stack{},
 						nil,
 					},
@@ -29,9 +29,9 @@ func TestConstantsOps(t *testing.T) {
 			[]opTest{
 				{
 					"pushes negative 1",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
-						&stack{[]byte{0x40, 0x00, 0x00, 0x01}},
+						stackWithNumbers(t, -1),
 						&stack{},
 						nil,
 					},
@@ -45,118 +45,90 @@ func TestConstantsOps(t *testing.T) {
 				//
 				{
 					"pushes 1",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
-						&stack{[]byte{0x00, 0x00, 0x00, 0x01}},
+						stackWithNumbers(t, 1),
 						&stack{},
 						nil,
 					},
 				},
 			},
 		},
-	}
+	},
+	)
 
-	for _, opTest := range tests {
-		for _, test := range opTest.tests {
-
-			t.Run(opTest.name+" "+test.name, func(t *testing.T) {
-				err := opTest.op(test.args.context)
-				if err != test.want.err {
-					t.Errorf("%s() error = %v, want err %v", opTest.name, err, test.want.err)
-				}
-
-				if !reflect.DeepEqual(test.want.stack, test.args.context.stack) {
-					t.Errorf("want %v; got %v", test.want.stack, test.args.context.stack)
-				}
-
-				if !reflect.DeepEqual(test.want.alt, test.args.context.alt) {
-					t.Errorf("want %v; got %v", test.want.alt, test.args.context.alt)
-				}
-			})
-
-		}
-	}
 }
 
 func Test_createOpPushNBytes(t *testing.T) {
-	type args struct {
-		context *context
-		n       uint8
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *stack
-		wantErr bool
-	}{
+	runOpTests(t, []opTests{
 		{
-			"zero",
-			args{contextWithData([]byte{0x00}), 0},
-			&stack{},
-			false,
+			"createOpPushNBytes(0)",
+			createOpPushNBytes(0),
+			[]opTest{
+				{
+					"zero",
+					config{buf: []byte{0x00}},
+					opWant{
+						&stack{},
+						&stack{},
+						nil,
+					},
+				},
+			},
 		},
 		{
-			"correct number of bytes available",
-			args{contextWithData([]byte{0x00}), 1},
-			&stack{[]byte{0x00}},
-			false,
+
+			"createOpPushNBytes(2)",
+			createOpPushNBytes(2),
+			[]opTest{
+				{
+					"correct number of bytes",
+					config{buf: []byte{0x00, 0x00}},
+					opWant{
+						&stack{{0x00, 0x00}},
+						&stack{},
+						nil,
+					},
+				},
+				{
+					"insufficient  number of bytes",
+					config{buf: []byte{0x00}},
+					opWant{
+						&stack{},
+						&stack{},
+						ErrInsufficientNumberOfBytes,
+					},
+				},
+				{
+					"empty reader",
+					config{buf: []byte{}},
+					opWant{
+						&stack{},
+						&stack{},
+						io.EOF,
+					},
+				},
+			},
 		},
-		{
-			"incorrect number of bytes available",
-			args{contextWithData([]byte{0x01}), 2},
-			&stack{},
-			true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			op := createOpPushNBytes(tt.args.n)
-
-			err := op(tt.args.context)
-
-			if (err != nil) != tt.wantErr {
-				t.Errorf("op() error = %v, wantErr %v", err, tt.wantErr)
-			}
-
-			if !reflect.DeepEqual(tt.args.context.stack, tt.want) {
-				t.Errorf("Want %+v; Got %+v", tt.want, tt.args.context.stack)
-			}
-		})
-	}
+	})
 }
 
 func Test_createOpPushN(t *testing.T) {
-	type args struct {
-		n uint8
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *stack
-		wantErr bool
-	}{
+	runOpTests(t, []opTests{
 		{
-			"simple",
-			args{0xff},
-			&stack{[]byte{0x00, 0x00, 0x00, 0xff}},
-			false,
+			"createOpPushN",
+			createOpPushN(0xff),
+			[]opTest{
+				{
+					"simple",
+					config{},
+					opWant{
+						stackWithNumbers(t, 255),
+						&stack{},
+						nil,
+					},
+				},
+			},
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			op := createOpPushN(tt.args.n)
-			context := emptyContext()
-
-			err := op(context)
-
-			if (err != nil) != tt.wantErr {
-				t.Errorf("op() error = %v, wantErr %v", err, tt.wantErr)
-			}
-
-			if !reflect.DeepEqual(context.stack, tt.want) {
-				t.Errorf("Want %+v; Got %+v", tt.want, context.stack)
-			}
-		})
-	}
+	})
 }

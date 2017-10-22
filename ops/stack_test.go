@@ -1,19 +1,18 @@
 package ops
 
 import (
-	"reflect"
 	"testing"
 )
 
 func TestStackOps(t *testing.T) {
-	tests := []opTests{
+	runOpTests(t, []opTests{
 		{
 			"opToAltStack",
 			opToAltStack,
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{contextWithStackAndAlt(&stack{}, &stack{[]byte{0x00}})},
+					config{alt: &stack{[]byte{0x00}}},
 					opWant{
 						&stack{},
 						&stack{[]byte{0x00}},
@@ -22,7 +21,10 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}, []byte{0xff}}, &stack{[]byte{0x00}})},
+					config{
+						alt:   &stack{{0x00}},
+						stack: &stack{{0x00}, {0xff}},
+					},
 					opWant{
 						&stack{[]byte{0x00}},
 						&stack{[]byte{0x00}, []byte{0xff}},
@@ -37,18 +39,23 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"simple",
-					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{[]byte{0x00}, []byte{0xff}})},
+					config{
+						alt:   &stack{{0xff}},
+						stack: &stack{{0x00}},
+					},
 					opWant{
-						&stack{[]byte{0x00}, []byte{0xff}},
-						&stack{[]byte{0x00}},
+						&stack{{0x00}, {0xff}},
+						&stack{},
 						nil,
 					},
 				},
 				{
 					"empty stack",
-					opArgs{contextWithStackAndAlt(&stack{[]byte{0x00}}, &stack{})},
+					config{
+						stack: &stack{{0x00}},
+					},
 					opWant{
-						&stack{[]byte{0x00}},
+						&stack{{0x00}},
 						&stack{},
 						ErrInvalidStackOperation,
 					},
@@ -61,7 +68,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"non zero top stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -70,7 +77,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"non zero top stack",
-					opArgs{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x01}})},
+					config{stack: &stack{[]byte{0x00, 0x00, 0x00, 0x01}}},
 					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x01}, []byte{0x00, 0x00, 0x00, 0x01}},
 						&stack{},
@@ -79,7 +86,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"zero top stack",
-					opArgs{contextWithStack(&stack{[]byte{0x00, 0x00, 0x00, 0x00}})},
+					config{stack: &stack{[]byte{0x00, 0x00, 0x00, 0x00}}},
 					opWant{
 						&stack{[]byte{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
@@ -94,7 +101,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{contextWithStack(&stack{})},
+					config{stack: &stack{}},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -103,7 +110,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"depth 1",
-					opArgs{contextWithStack(stackWithNumbers(t, 0))},
+					config{stack: stackWithNumbers(t, 0)},
 					opWant{
 						stackWithNumbers(t, 0, 1),
 						&stack{},
@@ -119,7 +126,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{contextWithStack(&stack{})},
+					config{stack: &stack{}},
 					opWant{
 						&stack{},
 						&stack{},
@@ -128,7 +135,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"single value",
-					opArgs{contextWithStack(&stack{[]byte{0x00}})},
+					config{stack: &stack{[]byte{0x00}}},
 					opWant{
 						&stack{},
 						&stack{},
@@ -143,7 +150,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}})},
+					config{stack: &stack{{0x1}}},
 					opWant{
 						&stack{{0x1}, {0x1}},
 						&stack{},
@@ -152,7 +159,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"empty stack",
-					opArgs{contextWithStack(&stack{})},
+					config{stack: &stack{}},
 					opWant{
 						&stack{},
 						&stack{},
@@ -167,7 +174,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					config{stack: &stack{{0x1}, {0x2}}},
 					opWant{
 						&stack{{0x1}, {0x2}, {0x1}},
 						&stack{},
@@ -176,7 +183,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"too small stack",
-					opArgs{contextWithStack(&stack{{0x1}})},
+					config{stack: &stack{{0x1}}},
 					opWant{
 						&stack{{0x1}},
 						&stack{},
@@ -191,7 +198,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"invalid size",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -200,7 +207,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					config{stack: &stack{{0x1}, {0x2}}},
 					opWant{
 						&stack{{0x2}},
 						&stack{},
@@ -215,7 +222,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -224,7 +231,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"not enough elements",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 2))},
+					config{stack: stackWithNumbers(t, 0, 2)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -233,7 +240,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"negative n",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, -1))},
+					config{stack: stackWithNumbers(t, 0, -1)},
 					opWant{
 						&stack{{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
@@ -242,7 +249,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 1, 2, 1))},
+					config{stack: stackWithNumbers(t, 1, 2, 1)},
 					opWant{
 						stackWithNumbers(t, 1, 2, 1),
 						&stack{},
@@ -257,7 +264,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -266,7 +273,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"not enough elements",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, 2))},
+					config{stack: stackWithNumbers(t, 0, 2)},
 					opWant{
 						stackWithNumbers(t, 0),
 						&stack{},
@@ -275,7 +282,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"negative n",
-					opArgs{contextWithStack(stackWithNumbers(t, 0, -1))},
+					config{stack: stackWithNumbers(t, 0, -1)},
 					opWant{
 						&stack{{0x00, 0x00, 0x00, 0x00}},
 						&stack{},
@@ -284,7 +291,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(stackWithNumbers(t, 1, 2, 1))},
+					config{stack: stackWithNumbers(t, 1, 2, 1)},
 					opWant{
 						stackWithNumbers(t, 2, 1),
 						&stack{},
@@ -299,7 +306,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -308,7 +315,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x3}, {0x2}, {0x1}})},
+					config{stack: &stack{{0x3}, {0x2}, {0x1}}},
 					opWant{
 						&stack{{0x2}, {0x3}, {0x1}},
 						&stack{},
@@ -323,7 +330,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -332,7 +339,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x2}, {0x1}, {0x0}})},
+					config{stack: &stack{{0x2}, {0x1}, {0x0}}},
 					opWant{
 						&stack{{0x2}, {0x0}, {0x1}},
 						&stack{},
@@ -347,7 +354,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -356,7 +363,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					config{stack: &stack{{0x1}, {0x2}}},
 					opWant{
 						&stack{{0x2}, {0x1}, {0x2}},
 						&stack{},
@@ -371,7 +378,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -380,7 +387,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x3}, {0x2}, {0x1}})},
+					config{stack: &stack{{0x3}, {0x2}, {0x1}}},
 					opWant{
 						&stack{{0x3}},
 						&stack{},
@@ -395,7 +402,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -404,7 +411,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}})},
+					config{stack: &stack{{0x1}, {0x2}}},
 					opWant{
 						&stack{{0x1}, {0x2}, {0x1}, {0x2}},
 						&stack{},
@@ -419,7 +426,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -428,7 +435,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}})},
+					config{stack: &stack{{0x1}, {0x2}, {0x3}}},
 					opWant{
 						&stack{{0x1}, {0x2}, {0x3}, {0x1}, {0x2}, {0x3}},
 						&stack{},
@@ -443,7 +450,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -452,7 +459,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}})},
+					config{stack: &stack{{0x1}, {0x2}, {0x3}, {0x4}}},
 					opWant{
 						&stack{{0x1}, {0x2}, {0x3}, {0x4}, {0x1}, {0x2}},
 						&stack{},
@@ -467,7 +474,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -476,7 +483,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x6}, {0x5}, {0x4}, {0x3}, {0x2}, {0x1}})},
+					config{stack: &stack{{0x6}, {0x5}, {0x4}, {0x3}, {0x2}, {0x1}}},
 					opWant{
 						&stack{{0x2}, {0x1}, {0x6}, {0x5}, {0x4}, {0x3}},
 						&stack{},
@@ -491,7 +498,7 @@ func TestStackOps(t *testing.T) {
 			[]opTest{
 				{
 					"empty stack",
-					opArgs{emptyContext()},
+					config{},
 					opWant{
 						&stack{},
 						&stack{},
@@ -500,7 +507,7 @@ func TestStackOps(t *testing.T) {
 				},
 				{
 					"simple",
-					opArgs{contextWithStack(&stack{{0x1}, {0x2}, {0x3}, {0x4}})},
+					config{stack: &stack{{0x1}, {0x2}, {0x3}, {0x4}}},
 					opWant{
 						&stack{{0x2}, {0x1}, {0x4}, {0x3}},
 						&stack{},
@@ -509,26 +516,5 @@ func TestStackOps(t *testing.T) {
 				},
 			},
 		},
-	}
-
-	for _, opTests := range tests {
-		for _, test := range opTests.tests {
-
-			t.Run(opTests.name+" "+test.name, func(t *testing.T) {
-				err := opTests.op(test.args.context)
-				if err != test.want.err {
-					t.Errorf("%s() error = %v, want err %v", opTests.name, err, test.want.err)
-				}
-
-				if !reflect.DeepEqual(test.want.stack, test.args.context.stack) {
-					t.Errorf("want %v; got %v", test.want.stack, test.args.context.stack)
-				}
-
-				if !reflect.DeepEqual(test.want.alt, test.args.context.alt) {
-					t.Errorf("want %v; got %v", test.want.alt, test.args.context.alt)
-				}
-			})
-
-		}
-	}
+	})
 }

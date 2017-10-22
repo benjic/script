@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
+	"reflect"
 	"testing"
 )
 
@@ -35,24 +36,15 @@ type opWant struct {
 }
 
 type opTest struct {
-	name string
-	args opArgs
-	want opWant
+	name   string
+	config config
+	want   opWant
 }
 
 type opTests struct {
 	name  string
 	op    Op
 	tests []opTest
-}
-
-func num(t *testing.T, n int32) []byte {
-	var buf bytes.Buffer
-	if err := binary.Write(&buf, binary.LittleEndian, &n); err != nil {
-		t.Errorf("Unable to get bytes for %+v", n)
-		return nil
-	}
-	return buf.Bytes()
 }
 
 func stackWithNumbers(t *testing.T, ns ...int32) *stack {
@@ -69,23 +61,46 @@ func stackWithNumbers(t *testing.T, ns ...int32) *stack {
 	return s
 }
 
-func emptyContext() *context {
-	return &context{&stack{}, &stack{}, new(bytes.Buffer)}
+type config struct {
+	stack    *stack
+	alt      *stack
+	buf      []byte
 }
 
-func contextWithStack(s *stack) *context {
-	return &context{s, &stack{}, new(bytes.Buffer)}
-}
+func runOpTests(t *testing.T, tests []opTests) {
 
-func contextWithStackAndAlt(s *stack, alt *stack) *context {
-	return &context{s, alt, new(bytes.Buffer)}
-}
+	defaultStack := func(s *stack) *stack {
+		if s == nil {
+			s = &stack{}
+		}
+		return s
+	}
 
-func contextWithData(buf []byte) *context {
-	return &context{
-		&stack{},
-		&stack{},
-		bytes.NewBuffer(buf),
+	for _, opTest := range tests {
+		for _, test := range opTest.tests {
+
+			t.Run(opTest.name+" "+test.name, func(t *testing.T) {
+
+				context := &context{
+					defaultStack(test.config.stack),
+					defaultStack(test.config.alt),
+					bytes.NewBuffer(test.config.buf),
+				}
+
+				err := opTest.op(context)
+				if err != test.want.err {
+					t.Errorf("%s() error = %v, want err %v", opTest.name, err, test.want.err)
+				}
+
+				if !reflect.DeepEqual(test.want.stack, context.stack) {
+					t.Errorf("want %v; got %v", test.want.stack, context.stack)
+				}
+
+				if !reflect.DeepEqual(test.want.alt, context.alt) {
+					t.Errorf("want %v; got %v", test.want.alt, context.alt)
+				}
+			})
+		}
 	}
 }
 
